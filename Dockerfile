@@ -23,6 +23,8 @@ COPY . /var/www/html/
 # Set proper permissions (optional, good for uploads and security)
 RUN chown -R www-data:www-data /var/www/html
 
+RUN echo "ServerName localhost" >> /etc/apache2/apache2.conf
+
 # Expose port (Railway automatically detects this)
 EXPOSE 80
 
