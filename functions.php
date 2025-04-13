@@ -31,7 +31,7 @@ function enable_CORS() {
     // Allow specific HTTP methods
     header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
     // Allow specific headers
-    header("Access-Control-Allow-Headers: Content-Type, Authorization, Accept");
+    header("Access-Control-Allow-Headers: Content-Type, Authorization, Accept, X-Request-With");
 
     // Optional: Return 200 for preflight OPTIONS requests
     if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
