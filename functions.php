@@ -320,7 +320,7 @@ function redirect_to_no_php_path()
 function base_url(): string
 {
     $scheme = "https";
-    return "{$scheme}://" . $_SERVER['HTTP_HOST'] . get_base_uri_path();
+    $r1 = "{$scheme}://" . $_SERVER['HTTP_HOST'] . get_base_uri_path();
 
     if (strpos($_SERVER['HTTP_HOST'], ':') === false) {
         // No port in the host, return as is
