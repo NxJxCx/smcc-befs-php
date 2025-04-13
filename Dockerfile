@@ -26,7 +26,7 @@ RUN apt-get update && apt-get install -y \
 RUN a2enmod rewrite
 
 # Allow Apache to use dynamic PORT from Railway
-ENV PORT=8080
+ENV PORT=9000
 
 # Replace Apache port with the one set by Railway at runtime
 RUN echo "Listen ${PORT}" > /etc/apache2/ports.conf
