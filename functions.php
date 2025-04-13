@@ -602,42 +602,38 @@ function default_html_body_end(array $imports = [])
 
 function admin_html_head(string $title_page = "Page Title", array $imports = [])
 {
-    default_html_head($title_page, [
+    default_html_head($title_page, array_merge([
         [ "type" => "style", "href" => "https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" ],
         [ "type" => "style", "href" => "assets/vendor/bootstrap/css/bootstrap.min.css" ],
-        [ "type" => "style", "href" => "https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css" ],
-        ...$imports
-    ]);
+        [ "type" => "style", "href" => "https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css" ]
+    ], $imports));
 }
 
 function admin_html_body_end(array $imports = [])
 {
-    default_html_body_end([
-        [ "type" => "script", "src" => "assets/vendor/bootstrap/js/bootstrap.bundle.min.js" ],
-        ...$imports
-    ]);
+    default_html_body_end(array_merge([
+        [ "type" => "script", "src" => "assets/vendor/bootstrap/js/bootstrap.bundle.min.js" ]
+    ], $imports));
 }
 
 
 function student_html_head(string $title_page = "Page Title", array $imports = [])
 {
-    default_html_head($title_page, [
-        [ "tyoe" => "style", "href" => "https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600&family=Nunito:wght@600;700;800&display=swap" ],
+    default_html_head($title_page, array_merge([
+        [ "type" => "style", "href" => "https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600&family=Nunito:wght@600;700;800&display=swap" ],
         [ "type" => "style", "href" => "smcc-students/css/bootstrap.min.css" ],
         [ "type" => "style", "href" => "https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css" ],
-        [ "type" => "style", "href" => "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"],
-        ...$imports
-    ]);
+        [ "type" => "style", "href" => "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"]
+    ], $imports));
 }
 
 function student_html_body_end(array $imports = [])
 {
-    default_html_body_end([
+    default_html_body_end(array_merge([
         [ "type" => "script", "src" => "https://code.jquery.com/jquery-3.4.1.min.js" ],
         [ "type" => "script", "src" => "assets/vendor/bootstrap/js/bootstrap.bundle.min.js" ],
-        [ "type" => "script", "src" => "smcc-students/lib/wow/wow.min.js" ],
-        ...$imports
-    ]);
+        [ "type" => "script", "src" => "smcc-students/lib/wow/wow.min.js" ]
+    ], $imports));
 }
 
 
