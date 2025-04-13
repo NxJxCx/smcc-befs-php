@@ -20,7 +20,7 @@ RUN a2enmod rewrite
 # Copy your application code into the web root
 COPY . /var/www/html/befs
 
-RUN echo "<?php phpinfo(); ?>" > /var/www/html/index.php
+RUN echo "<?php ini_set('display_errors', 1); error_reporting(E_ALL); phpinfo(); ?>" > /var/www/html/index.php
 
 # Set proper permissions (optional, good for uploads and security)
 RUN chown -R www-data:www-data /var/www/html
