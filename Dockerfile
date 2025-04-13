@@ -26,7 +26,7 @@ RUN apt-get update && apt-get install -y \
 RUN a2enmod rewrite
 
 # Allow Apache to use dynamic PORT from Railway
-ENV PORT=80
+ENV PORT=8080
 
 # Replace Apache port with the one set by Railway at runtime
 RUN echo "Listen ${PORT}" > /etc/apache2/ports.conf
@@ -46,7 +46,7 @@ RUN chown -R www-data:www-data /var/www/html
 RUN chown -R www-data:www-data /var/www/html/befs
 
 # Expose the default port (will be replaced by Railway with dynamic mapping)
-EXPOSE 80
+EXPOSE 8080
 
 # Start Apache in foreground
 CMD ["apache2-foreground"]
