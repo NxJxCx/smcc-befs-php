@@ -5,8 +5,8 @@ php_value date.timezone Asia/Manila
 php_value display_errors Off
 
 # Force HTTPS redirection
-RewriteCond %{HTTPS} off
-RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+# RewriteCond %{HTTPS} off
+# RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 
 # Handle PHP file requests
 RewriteCond %{REQUEST_FILENAME} -f
