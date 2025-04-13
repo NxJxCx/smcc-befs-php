@@ -435,17 +435,13 @@ admin_html_head("Dashboard", [
 
         </section>
 
-    </main><!-- End #main -->
+    </main>
+    <!-- Footer -->
+  <?php require_once get_footer(); ?>
 
-    <!-- ======= Footer ======= -->
-    <?php
-    require_once get_footer();
-    ?>
-    <!-- End Footer -->
+  <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
 
-    <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
-
-    <?php admin_html_body_end([
+  <?php admin_html_body_end([
         ["type" => "script", "src" => "assets/vendor/simple-datatables/simple-datatables.js"],
         ["type" => "script", "src" => "assets/vendor/apexcharts/apexcharts.min.js"],
         ["type" => "script", "src" => "assets/js/main.js"],
