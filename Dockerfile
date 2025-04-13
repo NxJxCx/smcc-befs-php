@@ -28,8 +28,9 @@ RUN chown -R www-data:www-data /var/www/html/befs
 
 RUN echo "ServerName localhost" >> /etc/apache2/apache2.conf
 
-# Expose port (Railway automatically detects this)
-EXPOSE 80
+RUN cat /var/www/html/index.php
+RUN cat /var/www/html/befs/.htaccess
+RUN cat /var/www/html/befs/.env
 
 # Start Apache (this is the default in the base image, but explicit here for Railway)
 CMD ["apache2-foreground"]
