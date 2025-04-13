@@ -148,6 +148,7 @@ class DB {
     private string $mysql_username;
     private string $mysql_password;
     private string $mysql_dbname;
+    private int $mysql_port;
     /**
      * @var mysqli_result|bool
      */
@@ -164,6 +165,7 @@ class DB {
         $this->mysql_username = $_ENV["BEFS_MYSQL_USERNAME"] ?? "root";
         $this->mysql_password = $_ENV["BEFS_MYSQL_PASSWORD"] ?? "";
         $this->mysql_dbname = $_ENV["BEFS_MYSQL_DBNAME"] ?? "smcc_befs";
+        $this->mysql_port = $_ENV["BEFS_MYSQL_PORT"] ?? 3306;
         try {
             $this->conn = $this->tryConnect();
         } catch (mysqli_sql_exception $e) {
@@ -173,7 +175,7 @@ class DB {
     }
 
     private function tryConnect() {
-        $mysqli = new mysqli($this->mysql_servername, $this->mysql_username, $this->mysql_password, $this->mysql_dbname);
+        $mysqli = new mysqli($this->mysql_servername, $this->mysql_username, $this->mysql_password, $this->mysql_dbname, $this->mysql_port);
         // Check connection
         if (!$mysqli || $mysqli->connect_error) {
             throw new mysqli_sql_exception("[Connection failed] " . $mysqli->connect_error);
@@ -182,13 +184,13 @@ class DB {
     }
 
     private function createDatabase() {
-        $c1 = new mysqli($this->mysql_servername,$this->mysql_username, $this->mysql_password);
+        $c1 = new mysqli($this->mysql_servername,$this->mysql_username, $this->mysql_password, '', $this->mysql_port);
         if (!$c1 || $c1->connect_error) {
             throw new mysqli_sql_exception("[Connection failed] " . $c1->connect_error);
         } else {
             $dbname = $this->mysql_dbname;
             try {
-                if (!$c1->query("USE $dbname")) {
+                if (!$c1->select_db($dbname)) {
                     $c1->query("CREATE DATABASE $dbname");
                 }
             } catch (mysqli_sql_exception $e) {
