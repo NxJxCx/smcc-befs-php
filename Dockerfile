@@ -18,10 +18,13 @@ RUN apt-get update && apt-get install -y \
 RUN a2enmod rewrite
 
 # Copy your application code into the web root
-COPY . /var/www/html/
+COPY . /var/www/html/befs
+
+RUN echo "<?php phpinfo(); ?>" > /var/www/html/index.php
 
 # Set proper permissions (optional, good for uploads and security)
 RUN chown -R www-data:www-data /var/www/html
+RUN chown -R www-data:www-data /var/www/html/befs
 
 RUN echo "ServerName localhost" >> /etc/apache2/apache2.conf
 
