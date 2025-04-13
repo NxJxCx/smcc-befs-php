@@ -319,7 +319,20 @@ function redirect_to_no_php_path()
 
 function base_url(): string
 {
-    return (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://" . $_SERVER['HTTP_HOST'] . get_base_uri_path();
+    $r1 = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://" . $_SERVER['HTTP_HOST'] . get_base_uri_path();
+
+    if (strpos($_SERVER['HTTP_HOST'], ':') === false) {
+        // No port in the host, return as is
+        return $r1;
+    } else {
+        $scheme = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on') ? "https" : "http";
+
+        // Split host by colon and take only the hostname (drop :9000)
+        $hostParts = explode(':', $_SERVER['HTTP_HOST']);
+        $host = $hostParts[0];
+
+        return $scheme . "://" . $host . get_base_uri_path();
+    }
 }
 
 function get_uri_path()
