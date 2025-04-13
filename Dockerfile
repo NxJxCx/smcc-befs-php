@@ -46,7 +46,7 @@ RUN chown -R www-data:www-data /var/www/html
 RUN chown -R www-data:www-data /var/www/html/befs
 
 # Expose the default port (will be replaced by Railway with dynamic mapping)
-EXPOSE 8080
+EXPOSE 9000
 
 # Start Apache in foreground
 CMD ["apache2-foreground"]
