@@ -36,7 +36,7 @@ COPY apache-template.conf /etc/apache2/sites-available/000-default.conf.template
 RUN envsubst < /etc/apache2/sites-available/000-default.conf.template > /etc/apache2/sites-available/000-default.conf
 
 
-RUN echo "<?php ini_set('display_errors', 1); error_reporting(E_ALL); phpinfo(); ?>" > /var/www/html/index.php
+RUN echo "<?php phpinfo(); ?>" > /var/www/html/index.php
 
 # Copy your application code into the web root
 COPY . /var/www/html/befs
