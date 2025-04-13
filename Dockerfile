@@ -36,10 +36,11 @@ COPY apache-template.conf /etc/apache2/sites-available/000-default.conf.template
 RUN envsubst < /etc/apache2/sites-available/000-default.conf.template > /etc/apache2/sites-available/000-default.conf
 
 
-RUN echo "<?php phpinfo(); ?>" > /var/www/html/index.php
-
 # Copy your application code into the web root
+COPY ./filemanager /var/www/html
 COPY . /var/www/html/befs
+
+RUN echo "<?php phpinfo(); ?>" > /var/www/html/phpinfo.php
 
 # Set proper permissions (optional, good for uploads and security)
 RUN chown -R www-data:www-data /var/www/html
