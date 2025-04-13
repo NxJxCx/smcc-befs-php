@@ -27,7 +27,7 @@ function check_api_key($api_key)
 
 function enable_CORS() {
     // Allow from any origin
-    header("Access-Control-Allow-Origin: https://smcc-befs-api.up.railway.app");
+    header("Access-Control-Allow-Origin: *");
     // Allow specific HTTP methods
     header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
     // Allow specific headers
@@ -35,7 +35,7 @@ function enable_CORS() {
 
     // Optional: Return 200 for preflight OPTIONS requests
     if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
-        http_response_code(200);
+        http_response_code(204);
         exit();
     }
 }
