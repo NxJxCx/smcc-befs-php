@@ -229,10 +229,13 @@ admin_html_head("Student's Revalida", [
                       $GWA = $row["gwa"] ?: null;
                       $GWA = $GWA !== null ? "$GWA %" : null;
                       $PREBOARD1 = array_filter($preboard1, fn($pb1) => strval($pb1["lrn_num"]) === strval($lrn_num));
-                      $PREBOARD1 = end($PREBOARD1);
+                      $PREBOARD1 = is_array($PREBOARD1) && count($PREBOARD1) > 0 ? end($PREBOARD1) : null;
                       $PREBOARD2 = array_filter($preboard2, fn($pb2) => strval($pb2["lrn_num"]) === strval($lrn_num));
-                      $PREBOARD2 = end($PREBOARD2);
-                      $is_valid = ($PREBOARD1["s_status"] ?: "") === "TAKEN" && ($PREBOARD2["s_status"] ?: "") === "TAKEN" && $REVALIDA_GRADE !== null;
+                      $PREBOARD2 = is_array($PREBOARD2) && count($PREBOARD2) > 0 ? end($PREBOARD2) : null;
+                      $is_valid =
+                        is_array($PREBOARD1) && ($PREBOARD1["s_status"] ?? "") === "TAKEN" &&
+                        is_array($PREBOARD2) && ($PREBOARD2["s_status"] ?? "") === "TAKEN" &&
+                        $REVALIDA_GRADE !== null;
                       $ikey = "inference_{$stud_id}_{$school_year}";
                       if (!(($is_valid && $filter === "Available" && !$has_inference) || ($is_valid && $filter === "Passing" && $has_inference) || 
                         ($is_valid && $filter === "Not Passing" && $has_interference) || (!$is_valid && $filter === "Not Available") || ($filter === ""))) {
