@@ -194,7 +194,7 @@ admin_html_head("Trained Models", [
                   <?php endif; ?>
                   <div class="file-item-icon far fa-file-alt text-secondary"></div>
                   <a href="javascript:void(0)" class="file-item-name">
-                      <?= $model["name"] . $model["type"] ?>
+                      <?= $model["name"] . $model["file_extension"] ?>
                   </a>
                   <div class="file-item-changed"><?= $model["created_at"] ?></div>
                   <div class="file-item-actions btn-group">

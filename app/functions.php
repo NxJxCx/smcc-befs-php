@@ -696,7 +696,7 @@ function getStudentsWithTotalAvgScore($preboard_level, $school_year_id = null) {
                         CONCAT(st.fname, ' ', st.lname) AS full_name,
                         st.gender AS gender,
                         sy.description as school_year,
-                        sssq.s_status as s_status,
+                        ANY_VALUE(sssq.s_status) as s_status,
                         SUM(ss.average) AS total_preboard_average
             FROM `students` as st
             LEFT JOIN
