@@ -6,7 +6,7 @@ authenticated_page("admin");
 if (isset($_POST['add_school_year'])) {
     $description = conn()->sanitize($_POST['description']);
     date_default_timezone_set("Asia/Manila");
-    $dt = date("Y-m-d") . " " . date("h:i:sa");
+    $dt = date("Y-m-d") . " " . date("H:i:s");
 
     $query = "INSERT INTO school_year (description, status, user_id, date_created) 
               VALUES ('$description', 'Not Set', '" . user_id() . "', '$dt')" or die(mysqli_error(conn()->get_conn()));

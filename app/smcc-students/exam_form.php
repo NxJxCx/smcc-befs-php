@@ -141,7 +141,7 @@ student_html_head('Home', [
         $count_questions = count($questions);
         $get_average = ($score / $count_questions) * $percent;
         date_default_timezone_set("Asia/Manila");
-        $dt = date("Y-m-d") . " " . date("h:i:sa");
+        $dt = date("Y-m-d") . " " . date("H:i:s");
 
         $query = "insert into student_score (score,total_items,stud_id,average,sub_id,date_accomplished,level) values ('$score','$count_questions','$stud_id','$get_average','$sub_id','$dt','$level') " or die(mysqli_error(conn()->get_conn()));
         if (conn()->query($query)) {

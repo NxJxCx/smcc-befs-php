@@ -9,7 +9,7 @@ if (isset($_POST['enroll_student'])) {
 
     // Set timezone and current date/time
     date_default_timezone_set("Asia/Manila");
-    $dt = date("Y-m-d") . " " . date("h:i:sa");
+    $dt = date("Y-m-d") . " " . date("H:i:s");
 
     // Only change the student's status to 'Enrolled'
     $query = "UPDATE students 

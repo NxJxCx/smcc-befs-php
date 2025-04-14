@@ -20,7 +20,7 @@ if (isset($_POST['add_student'])) {
     $confirm_password = $_POST['confirm_password'];
 
     date_default_timezone_set("Asia/Manila");
-    $dt = date("Y-m-d") . " " . date("h:i:sa");
+    $dt = date("Y-m-d") . " " . date("H:i:s");
 
     if ($password == $confirm_password) {
         $password = password_hash($password, PASSWORD_DEFAULT);

@@ -8,7 +8,7 @@ if (isset($_POST['add_course'])) {
     $description = conn()->sanitize($_POST['description']);
 
     date_default_timezone_set("Asia/Manila");
-    $dt = date("Y-m-d") . " " . date("h:i:sa");
+    $dt = date("Y-m-d") . " " . date("H:i:s");
 
     $query = "INSERT INTO course (description, date_entry, status, code_no) 
               VALUES ('$description', '$dt', 'Active', '$code_no')";
