@@ -156,12 +156,12 @@ admin_html_head("Trained Models", [
           >
           <h5 class="mt-2">Selected Models:</h5>
           <?php foreach ($school_years as $syid => $desc):
-            $is_currently_selected = in_array(strval($syid), array_keys($selected_models)) && strval($selected_models[strval($syid)]["inference_model_id"]) === strval($model["id"]);
             if (in_array(strval($syid), array_keys($selected_models))) {
               $mid = $selected_models[strval($syid)]["inference_model_id"];
               $md = array_filter($models, fn($m) => strval($m["id"]) === strval($mid));
               $md = end($md);
               if ($md) {
+                $is_currently_selected = in_array(strval($syid), array_keys($selected_models)) && strval($selected_models[strval($syid)]["inference_model_id"]) === strval($md["id"]);
                 $mname = $md["name"];
                 $mdate = (new DateTime($md["created_at"]))->format("Y-m-d H:i:s");
               }
