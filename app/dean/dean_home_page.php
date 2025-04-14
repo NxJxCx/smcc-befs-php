@@ -74,9 +74,9 @@ admin_html_head("Dashboard", [
                                         <?php
                                         // Fetch the dean's course
                                         $course_query = conn()->query("
-                        SELECT description FROM course 
-                        JOIN dean_course ON course.id = dean_course.course_id 
-                        WHERE dean_course.user_id = '" . user_id() . "'
+                        SELECT c.description FROM course as c
+                        JOIN dean_course as dc ON c.id = dc.course_id 
+                        WHERE dc.user_id = '" . user_id() . "'
                     ") or die(mysqli_error(conn()->get_conn()));
 
                                         if ($course_row = mysqli_fetch_array($course_query)) {
@@ -87,11 +87,11 @@ admin_html_head("Dashboard", [
 
                                         // Query to count the pending students based on the dean's course
                                         $query = conn()->query("
-                        SELECT COUNT(students.id) AS student_count_for_approval 
-                        FROM students 
-                        JOIN course ON students.course_id = course.id 
-                        WHERE students.status = 'For Approval' 
-                        AND course.description = '$deans_course'
+                        SELECT COUNT(st.id) AS student_count_for_approval 
+                        FROM students as st
+                        JOIN course as c ON st.course_id = c.id 
+                        WHERE st.status = 'For Approval' 
+                        AND c.description = '$deans_course'
                     ") or die(mysqli_error(conn()->get_conn()));
 
                                         if ($row = mysqli_fetch_array($query)) {
@@ -125,9 +125,9 @@ admin_html_head("Dashboard", [
                                         <?php
                                         // Fetch the dean's course
                                         $course_query = conn()->query("
-                        SELECT description FROM course 
-                        JOIN dean_course ON course.id = dean_course.course_id 
-                        WHERE dean_course.user_id = '" . user_id() . "'
+                        SELECT c.description FROM course AS c
+                        JOIN dean_course AS dc ON c.id = dc.course_id 
+                        WHERE dc.user_id = '" . user_id() . "'
                     ") or die(mysqli_error(conn()->get_conn()));
 
                                         if ($course_row = mysqli_fetch_array($course_query)) {
@@ -176,11 +176,11 @@ admin_html_head("Dashboard", [
                                         <?php
                                         // Query to count the inactive students based on the dean's course
                                         $query = conn()->query("
-                        SELECT COUNT(students.id) AS student_count_inactive 
-                        FROM students 
-                        JOIN course ON students.course_id = course.id 
-                        WHERE students.status = 'Inactive' 
-                        AND course.description = '$deans_course'
+                        SELECT COUNT(st.id) AS student_count_inactive 
+                        FROM students AS st
+                        JOIN course AS c ON st.course_id = c.id 
+                        WHERE st.status = 'Inactive' 
+                        AND c.description = '$deans_course'
                     ") or die(mysqli_error(conn()->get_conn()));
 
                                         if ($row = mysqli_fetch_array($query)) {
@@ -210,24 +210,24 @@ admin_html_head("Dashboard", [
                 // Query to calculate the total average per subject for students under the dean's course, filtered by school year
                 $query = conn()->query("
     SELECT 
-        subjects.description AS subject_name,
-        AVG(student_score.average) AS avg_score,
-        subject_percent.percent AS percentile
+        sj.description AS subject_name,
+        AVG(ss.average) AS avg_score,
+        sp.percent AS percentile
     FROM 
-        student_score
+        student_score AS ss
     JOIN 
-        subjects ON student_score.sub_id = subjects.id
+        subjects AS sj ON ss.sub_id = sj.id
     JOIN 
-        students ON student_score.stud_id = students.id
+        students AS st ON ss.stud_id = st.id
     JOIN 
-        dean_course ON dean_course.course_id = students.course_id
+        dean_course AS dc ON dc.course_id = st.course_id
     LEFT JOIN 
-        subject_percent ON subject_percent.sub_id = subjects.id
+        subject_percent AS sp ON sp.sub_id = sj.id
     WHERE 
-        dean_course.user_id = '". user_id() . "'
-        AND students.school_year_id = $school_year_id -- Filter by selected school year
+        dc.user_id = '". user_id() . "'
+        AND st.school_year_id = $school_year_id 
     GROUP BY 
-        subjects.id
+        sj.id
     ORDER BY 
         avg_score DESC
 ") or die(mysqli_error(conn()->get_conn()));
@@ -364,29 +364,29 @@ admin_html_head("Dashboard", [
                                     // Modify the query to only show students linked to the dean_course table for the given user_id
                                     $query = conn()->query("
                 SELECT
-                    year_level.description AS yr_desc,
-                    section.description AS sec_desc,
-                    students.status AS status,
-                    students.lrn_num AS lrn_num,
-                    students.id AS stud_id,
-                    students.course_id AS c_id,
-                    course.description AS course,
-                    students.lname AS lname,
-                    students.fname AS fname,
-                    students.level as level,
+                    yl.description AS yr_desc,
+                    sc.description AS sec_desc,
+                    st.status AS status,
+                    st.lrn_num AS lrn_num,
+                    st.id AS stud_id,
+                    st.course_id AS c_id,
+                    c.description AS course,
+                    st.lname AS lname,
+                    st.fname AS fname,
+                    st.level as level,
                     (
-                        SELECT SUM(student_score.average) as sum_average
-                        FROM student_score
-                        WHERE student_score.stud_id = students.id
+                        SELECT SUM(ss.average) as sum_average
+                        FROM student_score AS ss
+                        WHERE ss.stud_id = st.id
                     ) AS sum_average
                 FROM
-                    students
-                JOIN course ON students.course_id = course.id
-                JOIN year_level ON students.year_level_id = year_level.id
-                JOIN section ON students.section_id = section.id
-                WHERE ('$selected_school_year' = '' OR students.school_year_id = '$selected_school_year')
-                AND ('$dean_course' = '' OR students.course_id = '$dean_course')
-                AND students.course_id IN (SELECT course_id FROM dean_course WHERE user_id = '" . user_id() . "')
+                    students AS st
+                JOIN course AS c ON st.course_id = c.id
+                JOIN year_level AS yl ON st.year_level_id = yl.id
+                JOIN section AS sc ON st.section_id = sc.id
+                WHERE ('$selected_school_year' = '' OR st.school_year_id = '$selected_school_year')
+                AND ('$dean_course' = '' OR st.course_id = '$dean_course')
+                AND st.course_id IN (SELECT dc.course_id FROM dean_course AS dc WHERE dc.user_id = '" . user_id() . "')
                 ORDER BY sum_average DESC
                 LIMIT 10
                 ") or die(mysqli_error(conn()->get_conn()));
