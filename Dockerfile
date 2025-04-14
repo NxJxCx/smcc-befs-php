@@ -22,10 +22,10 @@ RUN apt-get update && apt-get install -y \
     && apt-get clean
 
 # Copy the self-signed certificate to the container
-COPY cert.pem /usr/local/share/ca-certificates/my-cert.crt
+COPY ./cert/cert.pem /usr/local/share/ca-certificates/my-cert.crt
 
-COPY cert.pem /etc/ssl/certs/my-cert.pem
-COPY key.pem /etc/ssl/private/my-cert.pem
+COPY ./cert/cert.pem /etc/ssl/certs/my-cert.pem
+COPY ./cert/key.pem /etc/ssl/private/my-cert.pem
 
 # Update the certificate store
 RUN update-ca-certificates
