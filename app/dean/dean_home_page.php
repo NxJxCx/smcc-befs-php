@@ -212,7 +212,7 @@ admin_html_head("Dashboard", [
     SELECT 
         sj.description AS subject_name,
         AVG(ss.average) AS avg_score,
-        sp.percent AS percentile
+        MAX(sp.percent) AS percentile
     FROM 
         student_score AS ss
     JOIN 
