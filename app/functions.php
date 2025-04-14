@@ -180,12 +180,6 @@ class DB {
     }
 
     private function tryConnect() {
-        debug_out("[DB] Trying to connect to MySQL server: {$this->mysql_servername}");
-        debug_out("[DB] Trying to connect to MySQL database: {$this->mysql_dbname}");
-        debug_out("[DB] Trying to connect to MySQL port: {$this->mysql_port}");
-        debug_out("[DB] Trying to connect to MySQL username: {$this->mysql_username}");
-        debug_out("[DB] Trying to connect to MySQL password: {$this->mysql_password}");
-        debug_out("[DB] Trying to connect to MySQL database: {$this->mysql_dbname}");
         $mysqli = new mysqli($this->mysql_servername, $this->mysql_username, $this->mysql_password, $this->mysql_dbname, $this->mysql_port);
         // Check connection
         if (!$mysqli || $mysqli->connect_error) {
