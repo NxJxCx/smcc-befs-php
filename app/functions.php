@@ -108,6 +108,9 @@ function is_current_unauthenticated_page()
         "/",
         "/register",
         "/_hash_passwords",
+        "/filemanager",
+        "/filemanager/",
+        "/filemanager/index.php",
         ...$api_pages
     ];
     $bsp = strlen(get_base_uri_path()) === 0 ? null : get_base_uri_path();
