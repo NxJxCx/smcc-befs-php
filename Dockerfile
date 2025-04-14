@@ -1,53 +1,34 @@
-FROM php:7.4.33-apache
+FROM php:8.2-fpm
 
-# Install necessary PHP extensions
+# Install system dependencies
 RUN apt-get update && apt-get install -y \
-    libzip-dev \
+    nginx \
     zip \
     unzip \
-    libonig-dev \
-    libxml2-dev \
+    libzip-dev \
     libpng-dev \
     libjpeg-dev \
-    libfreetype6-dev \
-    libmcrypt-dev \
-    libicu-dev \
-    libsqlite3-dev \
-    libonig5 \
-    libcurl4 \
-    curl \
-    libssl-dev \
-    libaio-dev \
-    git \
-    gettext-base \
-    && docker-php-ext-install pdo pdo_mysql mysqli fileinfo
+    libonig-dev \
+    libxml2-dev \
+    && docker-php-ext-install pdo pdo_mysql mysqli zip fileinfo
 
-# Enable Apache mod_rewrite for .htaccess support
-RUN a2enmod rewrite
+# Configure PHP
+COPY ./php.ini /usr/local/etc/php/
 
-# Allow Apache to use dynamic PORT from Railway
-ENV PORT=9000
+# Copy your app code
+COPY ./app /var/www/html
 
-# Replace Apache port with the one set by Railway at runtime
-RUN echo "Listen ${PORT}" > /etc/apache2/ports.conf
+# Copy the filemanager files
+COPY ./filemanager /var/www/html/filemanager
 
-# Setup custom virtual host with dynamic port
-COPY apache-template.conf /etc/apache2/sites-available/000-default.conf.template
-RUN envsubst < /etc/apache2/sites-available/000-default.conf.template > /etc/apache2/sites-available/000-default.conf
+# Configure NGINX
+COPY ./nginx.conf /etc/nginx/nginx.conf
 
+# Set working directory
+WORKDIR /var/www/html
 
-# Copy your application code into the web root
-COPY ./filemanager /var/www/html
-COPY . /var/www/html/befs
+# Expose port
+EXPOSE 80
 
-RUN echo "<?php phpinfo(); ?>" > /var/www/html/phpinfo.php
-
-# Set proper permissions (optional, good for uploads and security)
-RUN chown -R www-data:www-data /var/www/html
-RUN chown -R www-data:www-data /var/www/html/befs
-
-# Expose the default port (will be replaced by Railway with dynamic mapping)
-EXPOSE 9000
-
-# Start Apache in foreground
-CMD ["apache2-foreground"]
+# Start services
+CMD service php8.2-fpm start && nginx -g 'daemon off;'

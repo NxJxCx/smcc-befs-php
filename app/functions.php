@@ -26,18 +26,18 @@ function check_api_key($api_key)
 }
 
 function enable_CORS() {
-    // Allow from any origin
-    header("Access-Control-Allow-Origin: *");
-    // Allow specific HTTP methods
-    header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
-    // Allow specific headers
-    header("Access-Control-Allow-Headers: Content-Type, Authorization, Accept, X-Request-With");
+    // // Allow from any origin
+    // header("Access-Control-Allow-Origin: *");
+    // // Allow specific HTTP methods
+    // header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
+    // // Allow specific headers
+    // header("Access-Control-Allow-Headers: Content-Type, Authorization, Accept, X-Request-With");
 
-    // Optional: Return 200 for preflight OPTIONS requests
-    if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
-        http_response_code(200);
-        exit();
-    }
+    // // Optional: Return 200 for preflight OPTIONS requests
+    // if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+    //     http_response_code(200);
+    //     exit();
+    // }
 }
 
 function http_request_get(string $url)
@@ -108,8 +108,6 @@ function is_current_unauthenticated_page()
         "/",
         "/register",
         "/_hash_passwords",
-        "/ftp",
-        "/ftp_api",
         ...$api_pages
     ];
     $bsp = strlen(get_base_uri_path()) === 0 ? null : get_base_uri_path();
@@ -602,38 +600,42 @@ function default_html_body_end(array $imports = [])
 
 function admin_html_head(string $title_page = "Page Title", array $imports = [])
 {
-    default_html_head($title_page, array_merge([
+    default_html_head($title_page, [
         [ "type" => "style", "href" => "https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" ],
         [ "type" => "style", "href" => "assets/vendor/bootstrap/css/bootstrap.min.css" ],
-        [ "type" => "style", "href" => "https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css" ]
-    ], $imports));
+        [ "type" => "style", "href" => "https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css" ],
+        ...$imports,
+    ]);
 }
 
 function admin_html_body_end(array $imports = [])
 {
-    default_html_body_end(array_merge([
-        [ "type" => "script", "src" => "assets/vendor/bootstrap/js/bootstrap.bundle.min.js" ]
-    ], $imports));
+    default_html_body_end([
+        [ "type" => "script", "src" => "assets/vendor/bootstrap/js/bootstrap.bundle.min.js" ],
+        ...$imports
+    ]);
 }
 
 
 function student_html_head(string $title_page = "Page Title", array $imports = [])
 {
-    default_html_head($title_page, array_merge([
+    default_html_head($title_page, [
         [ "type" => "style", "href" => "https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600&family=Nunito:wght@600;700;800&display=swap" ],
         [ "type" => "style", "href" => "smcc-students/css/bootstrap.min.css" ],
         [ "type" => "style", "href" => "https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css" ],
-        [ "type" => "style", "href" => "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"]
-    ], $imports));
+        [ "type" => "style", "href" => "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"],
+        ...$imports,
+    ]);
 }
 
 function student_html_body_end(array $imports = [])
 {
-    default_html_body_end(array_merge([
+    default_html_body_end([
         [ "type" => "script", "src" => "https://code.jquery.com/jquery-3.4.1.min.js" ],
         [ "type" => "script", "src" => "assets/vendor/bootstrap/js/bootstrap.bundle.min.js" ],
-        [ "type" => "script", "src" => "smcc-students/lib/wow/wow.min.js" ]
-    ], $imports));
+        [ "type" => "script", "src" => "smcc-students/lib/wow/wow.min.js" ],
+        ...$imports
+    ]);
 }
 
 
