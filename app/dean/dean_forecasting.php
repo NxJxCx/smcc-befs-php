@@ -276,8 +276,17 @@ admin_html_head("Student's Revalida", [
                       <td><?= $course ?></td>
                       <td><?= $section ?></td>
                       <td><?= $sy ?></td>
-                      <td><?= ($PREBOARD1["s_status"] ?: "") === "TAKEN" ? $PREBOARD1["total_preboard_average"] . "%" : "NOT TAKEN" ?></td>
-                      <td><?= ($PREBOARD2["s_status"] ?: "") === "TAKEN" ? $PREBOARD2["total_preboard_average"] . "%" : "NOT TAKEN" ?></td>
+                      <td>
+                        <?= is_array($PREBOARD1) && ($PREBOARD1["s_status"] ?? "") === "TAKEN"
+                            ? ($PREBOARD1["total_preboard_average"] ?? "0") . "%"
+                            : "NOT TAKEN" ?>
+                      </td>
+
+                      <td>
+                        <?= is_array($PREBOARD2) && ($PREBOARD2["s_status"] ?? "") === "TAKEN"
+                            ? ($PREBOARD2["total_preboard_average"] ?? "0") . "%"
+                            : "NOT TAKEN" ?>
+                      </td>
                       <td><?= $REVALIDA_GRADE ?: "<a class='btn btn-outline-secondary border-0 text-start' href='".base_url()."/dean/dean_students_revalida?school_year=$school_year_id' title='Go to Revalida'>Add Revalida</a>" ?></td>
                       <td><?= $GWA ?: "<a class='btn btn-outline-secondary border-0 text-start' href='".base_url()."/dean/dean_students_gwa?school_year=$school_year_id' title='Go to GWA'>Add GWA</a>" ?></td>
                       <td>
