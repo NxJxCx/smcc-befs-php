@@ -250,7 +250,7 @@ class DB {
     }
 
     public function __destruct() {
-        if ($this->query_result) {
+        if ($this->query_result && $this->query_result !== true) {
             $this->query_result->free();
         }
         if ($this->conn) {
