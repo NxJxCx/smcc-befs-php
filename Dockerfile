@@ -1,4 +1,4 @@
-FROM php:8.2-fpm
+FROM php:8.3-fpm
 
 # Install system dependencies
 RUN apt-get update && apt-get install -y \
@@ -7,10 +7,19 @@ RUN apt-get update && apt-get install -y \
     unzip \
     libzip-dev \
     libpng-dev \
-    libjpeg-dev \
     libonig-dev \
     libxml2-dev \
-    && docker-php-ext-install pdo pdo_mysql mysqli zip fileinfo
+    libcurl4-openssl-dev \
+    libfreetype6-dev \
+    libjpeg62-turbo-dev \
+    libmcrypt-dev \
+    libpq-dev \
+    libicu-dev \
+    && docker-php-ext-install mysqli pdo pdo_mysql zip fileinfo
+
+RUN apt-get install -y supervisor
+
+COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
 # Configure PHP
 COPY ./php.ini /usr/local/etc/php/
@@ -30,5 +39,4 @@ WORKDIR /var/www/html
 # Expose port
 EXPOSE 80
 
-# Start services
-CMD service php8.2-fpm start && nginx -g 'daemon off;'
+CMD ["/usr/bin/supervisord"]
