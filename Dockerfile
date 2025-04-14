@@ -3,6 +3,7 @@ FROM php:8.3-fpm
 # Install system dependencies
 RUN apt-get update && apt-get install -y \
     nginx \
+    openssl \
     zip \
     unzip \
     libzip-dev \
@@ -15,11 +16,18 @@ RUN apt-get update && apt-get install -y \
     libmcrypt-dev \
     libpq-dev \
     libicu-dev \
+    supervisor \
     && docker-php-ext-install mysqli pdo pdo_mysql zip fileinfo
 
-RUN apt-get install -y supervisor
+# Generate self-signed SSL certificate
+RUN mkdir -p /etc/nginx/ssl && \
+    openssl req -x509 -nodes -days 365 \
+      -newkey rsa:2048 \
+      -keyout /etc/nginx/ssl/key.pem \
+      -out /etc/nginx/ssl/cert.pem \
+      -subj "/CN=localhost"
 
-COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+RUN apt-get install -y supervisor
 
 # Configure PHP
 COPY ./php.ini /usr/local/etc/php/
@@ -33,10 +41,13 @@ COPY ./filemanager /var/www/html/filemanager
 # Configure NGINX
 COPY ./nginx.conf /etc/nginx/nginx.conf
 
+# Supervisor
+COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+
 # Set working directory
 WORKDIR /var/www/html
 
 # Expose port
-EXPOSE 80
+EXPOSE 443
 
 CMD ["/usr/bin/supervisord"]
