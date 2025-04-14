@@ -27,7 +27,7 @@ function check_api_key($api_key)
 
 function enable_CORS() {
     // Allow from any origin
-    header("Access-Control-Allow-Origin: https://smcc-befs-api.up.railway.app");
+    header("Access-Control-Allow-Origin: *");
     // Allow specific HTTP methods
     header("Access-Control-Allow-Methods: GET, POST, OPTIONS, PUT, DELETE");
     // Allow specific headers
