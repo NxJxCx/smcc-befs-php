@@ -17,7 +17,9 @@ RUN apt-get update && apt-get install -y \
     libpq-dev \
     libicu-dev \
     supervisor \
-    && docker-php-ext-install mysqli pdo pdo_mysql zip fileinfo
+    ca-certificates \
+    && docker-php-ext-install mysqli pdo pdo_mysql zip fileinfo \
+    && apt-get clean
 
 # Generate self-signed SSL certificate
 RUN mkdir -p /etc/nginx/ssl && \
@@ -36,7 +38,7 @@ COPY ./php.ini /usr/local/etc/php/
 COPY ./app /var/www/html
 
 # Copy the filemanager files
-COPY ./filemanager /var/www/html/filemanager
+COPY ./filemanager/index.php /var/www/html/filemanager.php
 
 # Configure NGINX
 COPY ./nginx.conf /etc/nginx/nginx.conf
