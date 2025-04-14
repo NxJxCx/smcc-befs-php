@@ -10,9 +10,7 @@ if(isset($_POST['set_timer']))
 	$query="update subjects_timer set timer = '$timer' where subjects_id = '$s_id'" or die(mysqli_error(conn()->get_conn()));	  
 	if (conn()->query($query)) 
 	{
-		echo "<script type='text/javascript'>window.alert('Updated');
+		echo "<script type='text/javascript'>window.alert('Updated'); window.location.href = \"reviewer_subjects\";
 	</script>";
-
-		header("location: reviewer_subjects");
 	} 
 }

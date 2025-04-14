@@ -11,9 +11,7 @@ if(isset($_POST['update_subject']))
 	$query="update subjects set code = '$subject_code', description = '$description'  where id = '$s_id'" or die(mysqli_error(conn()->get_conn()));	  
 	if (conn()->query($query)) 
 	{
-		echo "<script type='text/javascript'>window.alert('Updated');
+		echo "<script type='text/javascript'>window.alert('Updated'); window.location.href = \"dean_subjects\";
 	</script>";
-
-		header("location: dean_subjects");
 	} 
 }
