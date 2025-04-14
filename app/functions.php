@@ -26,18 +26,18 @@ function check_api_key($api_key)
 }
 
 function enable_CORS() {
-    // // Allow from any origin
-    // header("Access-Control-Allow-Origin: *");
-    // // Allow specific HTTP methods
-    // header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
-    // // Allow specific headers
-    // header("Access-Control-Allow-Headers: Content-Type, Authorization, Accept, X-Request-With");
+    // Allow from any origin
+    header("Access-Control-Allow-Origin: *");
+    // Allow specific HTTP methods
+    header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
+    // Allow specific headers
+    header("Access-Control-Allow-Headers: Content-Type, Authorization, Accept, X-Request-With");
 
-    // // Optional: Return 200 for preflight OPTIONS requests
-    // if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
-    //     http_response_code(200);
-    //     exit();
-    // }
+    // Optional: Return 200 for preflight OPTIONS requests
+    if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+        http_response_code(204);
+        exit();
+    }
 }
 
 function http_request_get(string $url)
