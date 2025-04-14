@@ -21,13 +21,14 @@ RUN apt-get update && apt-get install -y \
     && docker-php-ext-install mysqli pdo pdo_mysql zip fileinfo \
     && apt-get clean
 
-# Generate self-signed SSL certificate
-RUN mkdir -p /etc/nginx/ssl && \
-    openssl req -x509 -nodes -days 365 \
-      -newkey rsa:2048 \
-      -keyout /etc/nginx/ssl/key.pem \
-      -out /etc/nginx/ssl/cert.pem \
-      -subj "/CN=localhost"
+# Copy the self-signed certificate to the container
+COPY cert.pem /usr/local/share/ca-certificates/my-cert.crt
+
+COPY cert.pem /etc/ssl/certs/my-cert.pem
+COPY key.pem /etc/ssl/private/my-cert.pem
+
+# Update the certificate store
+RUN update-ca-certificates
 
 RUN apt-get install -y supervisor
 
@@ -50,6 +51,6 @@ COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 WORKDIR /var/www/html
 
 # Expose port
-EXPOSE 443
+EXPOSE 443 80
 
 CMD ["/usr/bin/supervisord"]
