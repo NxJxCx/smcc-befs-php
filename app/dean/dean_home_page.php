@@ -375,7 +375,7 @@ admin_html_head("Dashboard", [
                     students.fname AS fname,
                     students.level as level,
                     (
-                        SELECT SUM(student_score.average)
+                        SELECT SUM(student_score.average) as sum_average
                         FROM student_score
                         WHERE student_score.stud_id = students.id
                     ) AS sum_average
