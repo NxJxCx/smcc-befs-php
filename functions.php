@@ -35,7 +35,7 @@ function enable_CORS() {
 
     // Optional: Return 200 for preflight OPTIONS requests
     if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
-        http_response_code(204);
+        http_response_code(200);
         exit();
     }
 }
