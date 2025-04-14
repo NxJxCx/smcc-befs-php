@@ -23,41 +23,31 @@ $students_preboard2 = getStudentsWithTotalAvgScore("PREBOARD2");
 
 // Query to fetch students based on dean's course and filter by school year
 $sql = "SELECT 
-          students.lrn_num AS lrn_num,
-          students.id AS stud_id,
-          students.course_id AS c_id,
-          students.gender AS gender,
-          course.description AS course,
-          section.description AS section,
-          students.lname AS lname,
-          students.fname AS fname,
-          school_year.description AS sy,
-          MAX(rg.revalida_grade) AS revalida_score,
-          MAX(gwa_p.gwa) AS gwa,
-          MAX(be.board_exam_grade) AS board_exam_score
-      FROM 
-          students
-      LEFT JOIN 
-          course ON students.course_id = course.id
-      LEFT JOIN 
-          section ON students.section_id = section.id
-      LEFT JOIN 
-          school_year ON students.school_year_id = school_year.id
-      LEFT JOIN 
-          `revalida_grade` as rg
-          ON rg.school_year_id = school_year.id
-          AND rg.student_id = students.id
-      LEFT JOIN 
-          `gwa_percentage` as gwa_p
-          ON gwa_p.school_year_id = school_year.id
-          AND gwa_p.student_id = students.id
-      LEFT JOIN 
-          `board_exam_grade` as be
-          ON be.school_year_id = school_year.id
-          AND be.student_id = students.id
-      WHERE 
-          students.status = 'active'
-      ORDER BY students.lname ASC
+            ANY_VALUE(students.lrn_num) AS lrn_num,
+            students.id AS stud_id,
+            ANY_VALUE(students.course_id) AS c_id,
+            ANY_VALUE(students.gender) AS gender,
+            ANY_VALUE(course.description) AS course,
+            ANY_VALUE(section.description) AS section,
+            ANY_VALUE(students.lname) AS lname,
+            ANY_VALUE(students.fname) AS fname,
+            ANY_VALUE(school_year.description) AS sy,
+            MAX(rg.revalida_grade) AS revalida_score,
+            MAX(gwa_p.gwa) AS gwa,
+            MAX(be.board_exam_grade) AS board_exam_score
+        FROM students
+        LEFT JOIN course ON students.course_id = course.id
+        LEFT JOIN section ON students.section_id = section.id
+        LEFT JOIN school_year ON students.school_year_id = school_year.id
+        LEFT JOIN revalida_grade as rg
+            ON rg.school_year_id = school_year.id AND rg.student_id = students.id
+        LEFT JOIN gwa_percentage as gwa_p
+            ON gwa_p.school_year_id = school_year.id AND gwa_p.student_id = students.id
+        LEFT JOIN board_exam_grade as be
+            ON be.school_year_id = school_year.id AND be.student_id = students.id
+        WHERE students.status = 'active'
+        GROUP BY students.id
+        ORDER BY ANY_VALUE(students.lname) ASC
 ";
 $data_gathered = [];
 
