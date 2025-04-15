@@ -4,6 +4,16 @@ authenticated_page("dean");
 
 
 $stud_id = conn()->sanitize($_REQUEST['stud_id']);
+$query=conn()->query("select * from users where id = '" . user_id() . "'");
+if($row=mysqli_fetch_array($query))
+{
+  $fname=$row['fname'];
+  $lname=$row['lname'];
+  $type=$row['type'];
+  $fname = ucfirst(strtolower($fname));
+  $lname = ucfirst(strtolower($lname));
+  $type = ucfirst(strtolower($type));
+}
 
 admin_html_head("Students Approval", [
   [ "type" => "style", "href" => "assets/css/style.css" ],
@@ -12,20 +22,6 @@ admin_html_head("Students Approval", [
 ?>
 
 <body>
-<?php 
-
-  $query=conn()->query("select * from users where id = 'user_id()'")or die(mysqli_error(conn()->get_conn()));
-    if($row=mysqli_fetch_array($query))
-    {
-      $fname=$row['fname'];
-      $lname=$row['lname'];
-      $type=$row['type'];
-      $fname = ucfirst(strtolower($fname));
-      $lname = ucfirst(strtolower($lname));
-      $type = ucfirst(strtolower($type));
-    }
-
-?>
   <!-- ======= Header ======= -->
   <?php
    require_once get_dean_header();

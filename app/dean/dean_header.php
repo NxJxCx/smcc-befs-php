@@ -23,15 +23,15 @@
                     // Assuming you have a field 'profile_image' in the users table
                     $profile_image = !empty($row['profile_image']) ? base_url() . "/" . $row['profile_image'] : base_url() . '/assets/img/profile-img2.jpg'; 
                     ?>
-                    <img src="<?php echo $profile_image; ?>" alt="Profile" class="rounded-circle">
-                    <span class="d-none d-md-block dropdown-toggle ps-2"><?php echo $lname; ?></span>
+                    <img src="<?=  $profile_image; ?>" alt="Profile" class="rounded-circle">
+                    <span class="d-none d-md-block dropdown-toggle ps-2"><?=  $lname; ?></span>
                 </a><!-- End Profile Image Icon -->
 
                 <!-- Dropdown Menu -->
                 <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile" aria-labelledby="navbarDropdown">
                     <li class="dropdown-header">
-                        <h6><?php echo $fname." ".$lname; ?></h6>
-                        <span><?php echo $type; ?></span>
+                        <h6><?= "$fname $lname"; ?></h6>
+                        <span><?=  $type; ?></span>
                     </li>
                     <li><hr class="dropdown-divider"></li>
                     <li>
