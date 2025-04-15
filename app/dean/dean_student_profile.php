@@ -195,11 +195,11 @@ admin_html_head("Student Profile", [
                                                         <?php
                                                         // Query to calculate the sum of the average scores for all subjects in PREBOARD 1
                                                         $stmt = conn()->prepare("
-    SELECT SUM(average) AS total_average
-    FROM student_score
-    WHERE stud_id = ? 
-        AND level = 'PREBOARD1'
-");
+                                                            SELECT SUM(average) AS total_average
+                                                            FROM student_score
+                                                            WHERE stud_id = ? 
+                                                                AND level = 'PREBOARD1'
+                                                        ");
 
                                                         // Execute the query with the student ID
                                                         $stmt->bind_param("i", $stud_id);
@@ -235,37 +235,41 @@ admin_html_head("Student Profile", [
                                                             <tbody>
                                                                 <?php
                                                                 // Query to fetch subjects and their individual averages for PREBOARD 1
-                                                                $query = conn()->query("
-                                SELECT 
-                                    subjects.code AS code,
-                                    subjects.description AS description,
-                                    students_subjects.status AS status,
-                                    student_score.score AS score,
-                                    student_score.total_items AS items,
-                                    student_score.average AS avg_score,
-                                    subject_percent.percent AS percent,
-                                    student_score.remarks AS remarks,
-                                    student_score.remarks2 AS remarks2
-                                FROM 
-                                    student_score
-                                JOIN 
-                                    students_subjects 
-                                    ON students_subjects.subjects_id = student_score.sub_id
-                                    AND students_subjects.students_id = student_score.stud_id
-                                JOIN 
-                                    subjects 
-                                    ON students_subjects.subjects_id = subjects.id
-                                LEFT JOIN 
-                                    subject_percent 
-                                    ON subject_percent.sub_id = subjects.id
-                                WHERE 
-                                    student_score.stud_id = '$stud_id' 
-                                    AND student_score.level = 'PREBOARD1'
-                                GROUP BY 
-                                    subjects.code, subjects.description;
-                            ") or die(mysqli_error(conn()->get_conn()));
+                                                                $stmt1 = conn()->prepare("
+                                                                    SELECT 
+                                                                        subjects.code AS code,
+                                                                        subjects.description AS description,
+                                                                        students_subjects.status AS status,
+                                                                        student_score.score AS score,
+                                                                        student_score.total_items AS items,
+                                                                        student_score.average AS avg_score,
+                                                                        subject_percent.percent AS percent,
+                                                                        student_score.remarks AS remarks,
+                                                                        student_score.remarks2 AS remarks2
+                                                                    FROM 
+                                                                        student_score
+                                                                    JOIN 
+                                                                        students_subjects 
+                                                                        ON students_subjects.subjects_id = student_score.sub_id
+                                                                        AND students_subjects.students_id = student_score.stud_id
+                                                                    JOIN 
+                                                                        subjects 
+                                                                        ON students_subjects.subjects_id = subjects.id
+                                                                    LEFT JOIN 
+                                                                        subject_percent 
+                                                                        ON subject_percent.sub_id = subjects.id
+                                                                    WHERE 
+                                                                        student_score.stud_id = ? 
+                                                                        AND student_score.level = 'PREBOARD1'
+                                                                    GROUP BY 
+                                                                        subjects.code, subjects.description;
+                                                                ");
 
-                                                                while ($row = mysqli_fetch_array($query)) {
+                                                                $stmt1->bind_param("i", $stud_id);
+                                                                $stmt1->execute();
+                                                                $result1 = $stmt1->get_result();
+
+                                                                while ($row = $result1->fetch_array()) {
                                                                     $code = $row['code'];
                                                                     $description = $row['description'];
                                                                     $status = $row['status'];
@@ -310,11 +314,11 @@ admin_html_head("Student Profile", [
                                                         <?php
                                                         // Query to calculate the sum of the average scores for all subjects in PREBOARD 1
                                                         $stmt = conn()->prepare("
-    SELECT SUM(average) AS total_average
-    FROM student_score
-    WHERE stud_id = ? 
-        AND level = 'PREBOARD2'
-");
+                                                            SELECT SUM(average) AS total_average
+                                                            FROM student_score
+                                                            WHERE stud_id = ? 
+                                                                AND level = 'PREBOARD2'
+                                                        ");
 
                                                         // Execute the query with the student ID
                                                         $stmt->bind_param("i", $stud_id);
@@ -348,7 +352,7 @@ admin_html_head("Student Profile", [
                                                             </thead>
                                                             <tbody>
                                                                 <?php
-                                                                $query = conn()->query("
+                                                                $stmt2 = conn()->prepare("
                                                                     SELECT 
                                                                         subjects.code AS code,
                                                                         subjects.description AS description,
@@ -377,9 +381,13 @@ admin_html_head("Student Profile", [
                                                                         AND students_subjects.level = 'PREBOARD2'
                                                                     GROUP BY 
                                                                         subjects.code, subjects.description;
-                                                                ") or die(mysqli_error(conn()->get_conn()));
+                                                                ");
 
-                                                                while ($row = mysqli_fetch_array($query)) {
+                                                                $stmt2->bind_param("i", $stud_id);
+                                                                $stmt2->execute();
+                                                                $result2 = $stmt2->get_result();
+
+                                                                while ($row = $result2->fetch_array()) {
                                                                     $code = $row['code'];
                                                                     $description = $row['description'];
                                                                     $status = $row['status'];
