@@ -239,13 +239,13 @@ admin_html_head("Student Profile", [
                                                                     SELECT 
                                                                         subjects.code AS code,
                                                                         subjects.description AS description,
-                                                                        students_subjects.status AS status,
-                                                                        student_score.score AS score,
-                                                                        student_score.total_items AS items,
-                                                                        student_score.average AS avg_score,
-                                                                        subject_percent.percent AS percent,
-                                                                        student_score.remarks AS remarks,
-                                                                        student_score.remarks2 AS remarks2
+                                                                        MAX(students_subjects.status) AS status,
+                                                                        MAX(student_score.score) AS score,
+                                                                        MAX(student_score.total_items) AS items,
+                                                                        MAX(student_score.average) AS avg_score,
+                                                                        MAX(subject_percent.percent) AS percent,
+                                                                        MAX(student_score.remarks) AS remarks,
+                                                                        MAX(student_score.remarks2) AS remarks2
                                                                     FROM 
                                                                         student_score
                                                                     JOIN 
@@ -285,7 +285,7 @@ admin_html_head("Student Profile", [
                                                                         <td><?= $code; ?></td>
                                                                         <td><?= $description; ?></td>
                                                                         <td><?= $status; ?></td>
-                                                                        <td><?= $score . " / " . $items; ?></td>
+                                                                        <td><?= "$score / $items"; ?></td>
                                                                         <td><?= $formatted_avg_score; ?> %</td>
                                                                         <td><?= $percent; ?>%</td>
                                                                         <td style="max-width: 200px; overflow-x: auto;"><?= htmlspecialchars($remarks ?: ""); ?></td>
@@ -403,7 +403,7 @@ admin_html_head("Student Profile", [
                                                                         <td><?= $code; ?></td>
                                                                         <td><?= $description; ?></td>
                                                                         <td><?= $status; ?></td>
-                                                                        <td><?= $score . " / " . $items; ?></td>
+                                                                        <td><?= "$score / $items"; ?></td>
                                                                         <td><?= $formatted_sum_average; ?> %</td>
                                                                         <td><?= $percent; ?>%</td>
                                                                         <td style="max-width: 200px; overflow-x: auto;"><?= htmlspecialchars($remarks ?: ""); ?></td>
