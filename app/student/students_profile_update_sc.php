@@ -32,14 +32,17 @@ if (isset($_POST['update_profile'])) {
     }
 
     // Update the database
-    $query = "UPDATE students SET 
-                  about = '$about', 
-                  complete_address = '$address', ";
-    $query .= (($image_upload_path ?? false) ? " profile_image = '$image_upload_path' " : "") . " WHERE id = ?";
+    $query = "UPDATE students SET about = ?, complete_address = ?";
+    $bindparamformat = "ssi";
+    if ($image_upload_path ?? false) {
+        $bindparamformat = "sssi";
+        $query .= ", profile_image = ?";
+    }
+    $query .= " WHERE id = ?";
 
     $stmt = conn()->prepare($query);
     $uid = user_id();
-    $stmt->bind_param("i", $uid);
+    $stmt->bind_param($bindparamformat, $uid);
     if ($stmt->execute()) {
         echo "<script>alert('Profile Successfully Updated!');
         document.location='students_profile';</script>";
