@@ -236,32 +236,32 @@ admin_html_head("Student Profile", [
                                                                 <?php
                                                                 $stmt1 = conn()->prepare("
                                                                     SELECT 
-                                                                        subjects.code AS code,
-                                                                        subjects.description AS description,
-                                                                        MAX(students_subjects.status) AS status,
-                                                                        MAX(student_score.score) AS score,
-                                                                        MAX(student_score.total_items) AS items,
-                                                                        MAX(student_score.average) AS avg_score,
-                                                                        MAX(subject_percent.percent) AS percent,
-                                                                        MAX(student_score.remarks) AS remarks,
-                                                                        MAX(student_score.remarks2) AS remarks2
+                                                                        sj.code AS code,
+                                                                        sj.description AS description,
+                                                                        MAX(ssj.status) AS status,
+                                                                        MAX(ssc.score) AS score,
+                                                                        MAX(ssc.total_items) AS items,
+                                                                        MAX(ssc.average) AS avg_score,
+                                                                        MAX(sp.percent) AS percent,
+                                                                        MAX(ssc.remarks) AS remarks,
+                                                                        MAX(ssc.remarks2) AS remarks2
                                                                     FROM 
-                                                                        student_score
+                                                                        student_score AS ssc 
                                                                     JOIN 
-                                                                        students_subjects 
-                                                                        ON students_subjects.subjects_id = student_score.sub_id
-                                                                        AND students_subjects.students_id = student_score.stud_id
+                                                                        students_subjects AS ssj 
+                                                                        ON ssj.subjects_id = ssc.sub_id
+                                                                        AND ssj.students_id = ssc.stud_id
                                                                     JOIN 
-                                                                        subjects 
-                                                                        ON students_subjects.subjects_id = subjects.id
+                                                                        subjects AS sj 
+                                                                        ON ssj.subjects_id = sj.id
                                                                     LEFT JOIN 
-                                                                        subject_percent 
-                                                                        ON subject_percent.sub_id = subjects.id
+                                                                        subject_percent AS sp 
+                                                                        ON sp.sub_id = sj.id
                                                                     WHERE 
-                                                                        student_score.stud_id = ? 
-                                                                        AND student_score.level = 'PREBOARD1'
+                                                                        ssc.stud_id = ? 
+                                                                        AND ssc.level = 'PREBOARD1'
                                                                     GROUP BY 
-                                                                        subjects.code, subjects.description;
+                                                                        sj.code, sj.description;
                                                                 ");
                                                                 $stmt1->bind_param("i", $stud_id);
                                                                 $stmt1->execute();
@@ -325,33 +325,33 @@ admin_html_head("Student Profile", [
                                                                 <?php
                                                                 $stmt2 = conn()->prepare("
                                                                     SELECT 
-                                                                        subjects.code AS code,
-                                                                        subjects.description AS description,
-                                                                        MAX(students_subjects.status) AS status,
-                                                                        MAX(student_score.score) AS score,
-                                                                        MAX(student_score.total_items) AS items,
-                                                                        MAX(student_score.average) AS avg_score,
-                                                                        MAX(subject_percent.percent) AS percent,
-                                                                        MAX(student_score.remarks) AS remarks,
-                                                                        MAX(student_score.remarks2) AS remarks2
+                                                                        sj.code AS code,
+                                                                        sj.description AS description,
+                                                                        MAX(ssj.status) AS status,
+                                                                        MAX(ssc.score) AS score,
+                                                                        MAX(ssc.total_items) AS items,
+                                                                        MAX(ssc.average) AS avg_score,
+                                                                        MAX(sp.percent) AS percent,
+                                                                        MAX(ssc.remarks) AS remarks,
+                                                                        MAX(ssc.remarks2) AS remarks2
                                                                     FROM 
-                                                                        student_score
+                                                                        student_score AS ssc 
                                                                     JOIN 
-                                                                        students_subjects 
-                                                                        ON students_subjects.students_id = student_score.stud_id
-                                                                        AND students_subjects.subjects_id = student_score.sub_id
+                                                                        students_subjects AS ssj 
+                                                                        ON ssj.students_id = ssc.stud_id
+                                                                        AND ssj.subjects_id = ssc.sub_id
                                                                     JOIN 
-                                                                        subjects 
-                                                                        ON students_subjects.subjects_id = subjects.id
+                                                                        subjects AS sj 
+                                                                        ON ssj.subjects_id = sj.id
                                                                     LEFT JOIN 
-                                                                        subject_percent 
-                                                                        ON subject_percent.sub_id = subjects.id
+                                                                        subject_percent AS sp  
+                                                                        ON sp.sub_id = subjects.id
                                                                     WHERE 
-                                                                        student_score.stud_id = ? 
-                                                                        AND student_score.level = 'PREBOARD2'
-                                                                        AND students_subjects.level = 'PREBOARD2'
+                                                                        ssc.stud_id = ? 
+                                                                        AND ssc.level = 'PREBOARD2'
+                                                                        AND ssj.level = 'PREBOARD2'
                                                                     GROUP BY 
-                                                                        subjects.code, subjects.description;
+                                                                        sj.code, sj.description;
                                                                 ");
 
                                                                 $stmt2->bind_param("i", $stud_id);
