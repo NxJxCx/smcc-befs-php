@@ -178,14 +178,14 @@ admin_html_head("Datasets", [
   <script>
     $(function() {
       // Convert PHP array to JavaScript array
-      var valid_dataset = <?= json_encode(array_map(
+      var valid_dataset = <?= json_encode([...array_map(
         fn($vd) => [
           "preboard1" => floatval($vd["preboard1"]),
           "preboard2" => floatval($vd["preboard2"]),
           "revalida" => floatval($vd["revalida_score"]),
           "gwa" => ($vd["gwa"] ?? null) === null ? NAN : floatval($vd["gwa"]),
           "board_passer" => floatval($vd["board_exam_score"]) >= 75 ? "PASSER" : "NOT_PASSER"
-        ], $valid_dataset)
+        ], $valid_dataset)]
       ) ?>;
         
         $("button#saveDatasetBtn").on("click", function (ev) {
