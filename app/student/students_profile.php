@@ -441,14 +441,14 @@ admin_html_head("Profile", [
                     <div class="row mb-3">
                       <label for="about" class="col-md-4 col-lg-3 col-form-label">About</label>
                       <div class="col-md-8 col-lg-9">
-                        <textarea name="about" class="form-control" id="about" style="height: 100px"></textarea>
+                        <textarea name="about" class="form-control" id="about" style="height: 100px"><?= $about ?? "" ?></textarea>
                       </div>
                     </div>
 
                     <div class="row mb-3">
                       <label for="Job" class="col-md-4 col-lg-3 col-form-label">Complete Address</label>
                       <div class="col-md-8 col-lg-9">
-                        <input name="address" type="text" class="form-control" id="Job" value="">
+                        <input name="address" type="text" class="form-control" id="Job" value="<?= $complete_address ?? "" ?>">
                       </div>
                     </div>
 
