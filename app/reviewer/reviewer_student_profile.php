@@ -164,7 +164,7 @@ admin_html_head("Student Profile", [
                                         </div>
                                         <div class="row">
                                             <div class="col-lg-3 col-md-4 label ">Subject Counts</div>
-                                            <div class="col-lg-9 col-md-8"><?= $sub_count > 0 ? $subcount : "<span class='badge bg-danger'>Empty</span>"; ?></div>
+                                            <div class="col-lg-9 col-md-8"><?= $sub_count > 0 ? $sub_count : "<span class='badge bg-danger'>Empty</span>"; ?></div>
                                         </div>
                                         <div class="row">
                                             <div class="col-lg-3 col-md-4 label ">Status</div>
