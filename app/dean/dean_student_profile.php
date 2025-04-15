@@ -110,7 +110,7 @@ admin_html_head("Student Profile", [
                                 <div class="tab-pane fade show active profile-overview" id="profile-overview">
                                     <form>
                                         </br>
-                                        <img src='<?php echo !empty($student_profile_image) ? base_url() . "/{$student_profile_image}" : "../assets/img/profile-img2.jpg"; ?>' alt='Profile Image' class='rounded-circle' width='100'>
+                                        <img src='<?= !empty($student_profile_image) ? base_url() . "/{$student_profile_image}" : "../assets/img/profile-img2.jpg"; ?>' alt='Profile Image' class='rounded-circle' width='100'>
                                         </br>
 
                                         <h5 class="card-title">About</h5>
@@ -124,19 +124,19 @@ admin_html_head("Student Profile", [
                                         <h5 class="card-title">Profile Details</h5>
                                         <div class="row">
                                             <div class="col-lg-3 col-md-4 label ">ID Number</div>
-                                            <div class="col-lg-9 col-md-8"><?php echo $lrn_num ? "<b>{$lrn_num}</b>" : "<span class='badge bg-danger'>Not Yet Assign</span>"; ?></div>
+                                            <div class="col-lg-9 col-md-8"><?= $lrn_num ? "<b>{$lrn_num}</b>" : "<span class='badge bg-danger'>Not Yet Assign</span>"; ?></div>
                                         </div>
                                         <div class="row">
                                             <div class="col-lg-3 col-md-4 label ">Full Name</div>
-                                            <div class="col-lg-9 col-md-8"><?php echo $sfname . " " . $slname; ?></div>
+                                            <div class="col-lg-9 col-md-8"><?= $sfname . " " . $slname; ?></div>
                                         </div>
                                         <div class="row">
                                             <div class="col-lg-3 col-md-4 label ">Gender</div>
-                                            <div class="col-lg-9 col-md-8"><?php echo $gender; ?></div>
+                                            <div class="col-lg-9 col-md-8"><?= $gender; ?></div>
                                         </div>
                                         <div class="row">
                                             <div class="col-lg-3 col-md-4 label">Username</div>
-                                            <div class="col-lg-9 col-md-8"><?php echo $username; ?></div>
+                                            <div class="col-lg-9 col-md-8"><?= $username; ?></div>
                                         </div>
                                         <div class="row">
                                             <div class="col-lg-3 col-md-4 label">Password</div>
@@ -144,27 +144,27 @@ admin_html_head("Student Profile", [
                                         </div>
                                         <div class="row">
                                             <div class="col-lg-3 col-md-4 label ">Complete Address</div>
-                                            <div class="col-lg-9 col-md-8"><?php echo $complete_address ? $complete_address : "<span class='badge bg-danger'>None</span>"; ?></div>
+                                            <div class="col-lg-9 col-md-8"><?= $complete_address ? $complete_address : "<span class='badge bg-danger'>None</span>"; ?></div>
                                         </div>
                                         <div class="row">
                                             <div class="col-lg-3 col-md-4 label ">Year Level</div>
-                                            <div class="col-lg-9 col-md-8"><?php echo $yr_desc ? $yr_desc : "<span class='badge bg-danger'>Not Yet Assign</span>"; ?></div>
+                                            <div class="col-lg-9 col-md-8"><?= $yr_desc ? $yr_desc : "<span class='badge bg-danger'>Not Yet Assign</span>"; ?></div>
                                         </div>
                                         <div class="row">
                                             <div class="col-lg-3 col-md-4 label ">Course</div>
-                                            <div class="col-lg-9 col-md-8"><?php echo $c_desc ? $c_desc : "<span class='badge bg-danger'>Not Yet Assign</span>"; ?></div>
+                                            <div class="col-lg-9 col-md-8"><?= $c_desc ? $c_desc : "<span class='badge bg-danger'>Not Yet Assign</span>"; ?></div>
                                         </div>
                                         <div class="row">
                                             <div class="col-lg-3 col-md-4 label ">Section</div>
-                                            <div class="col-lg-9 col-md-8"><?php echo $sec_desc ? $sec_desc : "<span class='badge bg-danger'>Not Yet Assign</span>"; ?></div>
+                                            <div class="col-lg-9 col-md-8"><?= $sec_desc ? $sec_desc : "<span class='badge bg-danger'>Not Yet Assign</span>"; ?></div>
                                         </div>
                                         <div class="row">
                                             <div class="col-lg-3 col-md-4 label ">Subject Counts</div>
-                                            <div class="col-lg-9 col-md-8"><?php echo $sub_count > 0 ? $sub_count : "<span class='badge bg-danger'>Empty</span>"; ?></div>
+                                            <div class="col-lg-9 col-md-8"><?= $sub_count > 0 ? $sub_count : "<span class='badge bg-danger'>Empty</span>"; ?></div>
                                         </div>
                                         <div class="row">
                                             <div class="col-lg-3 col-md-4 label ">Status</div>
-                                            <div class="col-lg-9 col-md-8"><?php echo $status == "For Approval" ? "<span class='badge bg-danger'>For Approval</span>" : "<span class='badge bg-success'>{$status}</span>"; ?></div>
+                                            <div class="col-lg-9 col-md-8"><?= $status == "For Approval" ? "<span class='badge bg-danger'>For Approval</span>" : "<span class='badge bg-success'>{$status}</span>"; ?></div>
                                         </div>
                                         <div class="row">
                                             <div class="col-lg-3 col-md-4 label">Average Score</div>
@@ -282,14 +282,14 @@ admin_html_head("Student Profile", [
                                                                     $formatted_avg_score = number_format($avg_score, 2); // Format individual subject average
                                                                 ?>
                                                                     <tr>
-                                                                        <td><?php echo $code; ?></td>
-                                                                        <td><?php echo $description; ?></td>
-                                                                        <td><?php echo $status; ?></td>
-                                                                        <td><?php echo $score . " / " . $items; ?></td>
-                                                                        <td><?php echo $formatted_avg_score; ?> %</td>
-                                                                        <td><?php echo $percent; ?>%</td>
-                                                                        <td style="max-width: 200px; overflow-x: auto;"><?php echo htmlspecialchars($remarks); ?></td>
-                                                                        <td style="max-width: 200px; overflow-x: auto;"><?php echo htmlspecialchars($remarks2); ?></td>
+                                                                        <td><?= $code; ?></td>
+                                                                        <td><?= $description; ?></td>
+                                                                        <td><?= $status; ?></td>
+                                                                        <td><?= $score . " / " . $items; ?></td>
+                                                                        <td><?= $formatted_avg_score; ?> %</td>
+                                                                        <td><?= $percent; ?>%</td>
+                                                                        <td style="max-width: 200px; overflow-x: auto;"><?= htmlspecialchars($remarks ?: ""); ?></td>
+                                                                        <td style="max-width: 200px; overflow-x: auto;"><?= htmlspecialchars($remarks2 ?: ""); ?></td>
                                                                     </tr>
                                                                 <?php
                                                                 }
@@ -400,14 +400,14 @@ admin_html_head("Student Profile", [
                                                                     $formatted_sum_average = number_format($avg_score, 2);
                                                                 ?>
                                                                     <tr>
-                                                                        <td><?php echo $code; ?></td>
-                                                                        <td><?php echo $description; ?></td>
-                                                                        <td><?php echo $status; ?></td>
-                                                                        <td><?php echo $score . " / " . $items; ?></td>
-                                                                        <td><?php echo $formatted_sum_average; ?> %</td>
-                                                                        <td><?php echo $percent; ?>%</td>
-                                                                        <td style="max-width: 200px; overflow-x: auto;"><?php echo htmlspecialchars($remarks); ?></td>
-                                                                        <td style="max-width: 200px; overflow-x: auto;"><?php echo htmlspecialchars($remarks2); ?></td>
+                                                                        <td><?= $code; ?></td>
+                                                                        <td><?= $description; ?></td>
+                                                                        <td><?= $status; ?></td>
+                                                                        <td><?= $score . " / " . $items; ?></td>
+                                                                        <td><?= $formatted_sum_average; ?> %</td>
+                                                                        <td><?= $percent; ?>%</td>
+                                                                        <td style="max-width: 200px; overflow-x: auto;"><?= htmlspecialchars($remarks ?: ""); ?></td>
+                                                                        <td style="max-width: 200px; overflow-x: auto;"><?= htmlspecialchars($remarks2 ?: ""); ?></td>
                                                                     </tr>
                                                                 <?php
                                                                 }
