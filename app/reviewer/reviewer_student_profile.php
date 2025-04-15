@@ -45,16 +45,16 @@ if ($row = $result->fetch_array()) {
 }
 
 // Fetch subject count using prepared statement
-$stmt = conn()->prepare("SELECT COUNT(subjects_id) AS sub_count
-    FROM students_subjects
-    WHERE students_id = ?");
+$stmt = conn()->prepare("SELECT COUNT(ss.subjects_id) AS sub_count
+    FROM students_subjects AS ss
+    WHERE ss.students_id = ?");
 $stmt->bind_param("i", $stud_id);
 $stmt->execute();
 $result = $stmt->get_result();
 if ($row = $result->fetch_array()) {
     $sub_count = $row['sub_count'];
 } else {
-    echo "Error: " . mysqli_error(conn()->get_conn());
+    die("Error: " . mysqli_error(conn()->get_conn()));
 }
 
 $user_id = user_id();
@@ -234,8 +234,7 @@ admin_html_head("Student Profile", [
                                                             </thead>
                                                             <tbody>
                                                                 <?php
-                                                                // Query to fetch subjects and their individual averages for PREBOARD 1
-                                                                $query = conn()->query("
+                                                                $stmt1 = conn()->prepare("
                                                                     SELECT 
                                                                         subjects.code AS code,
                                                                         subjects.description AS description,
@@ -259,13 +258,16 @@ admin_html_head("Student Profile", [
                                                                         subject_percent 
                                                                         ON subject_percent.sub_id = subjects.id
                                                                     WHERE 
-                                                                        student_score.stud_id = '$stud_id' 
+                                                                        student_score.stud_id = ? 
                                                                         AND student_score.level = 'PREBOARD1'
                                                                     GROUP BY 
                                                                         subjects.code, subjects.description;
-                                                                ") or die(mysqli_error(conn()->get_conn()));
+                                                                ");
+                                                                $stmt1->bind_param("i", $stud_id);
+                                                                $stmt1->execute();
+                                                                $result1 = $stmt1->get_result();
 
-                                                                while ($row = mysqli_fetch_array($query)) {
+                                                                while ($row = mysqli_fetch_array($result1)) {
                                                                     $code = $row['code'];
                                                                     $description = $row['description'];
                                                                     $status = $row['status'];
@@ -281,7 +283,7 @@ admin_html_head("Student Profile", [
                                                                         <td><?= $code; ?></td>
                                                                         <td><?= $description; ?></td>
                                                                         <td><?= $status; ?></td>
-                                                                        <td><?= $score . " / " . $items; ?></td>
+                                                                        <td><?= "$score  / $items"; ?></td>
                                                                         <td><?= $formatted_avg_score; ?> %</td>
                                                                         <td><?= $percent; ?>%</td>
                                                                         <td style="max-width: 200px; overflow-x: auto;"><?= htmlspecialchars($remarks ?: ""); ?></td>
@@ -321,7 +323,7 @@ admin_html_head("Student Profile", [
                                                             </thead>
                                                             <tbody>
                                                                 <?php
-                                                                $query = conn()->query("
+                                                                $stmt2 = conn()->prepare("
                                                                     SELECT 
                                                                         subjects.code AS code,
                                                                         subjects.description AS description,
@@ -345,14 +347,18 @@ admin_html_head("Student Profile", [
                                                                         subject_percent 
                                                                         ON subject_percent.sub_id = subjects.id
                                                                     WHERE 
-                                                                        student_score.stud_id = '$stud_id' 
+                                                                        student_score.stud_id = ? 
                                                                         AND student_score.level = 'PREBOARD2'
                                                                         AND students_subjects.level = 'PREBOARD2'
                                                                     GROUP BY 
                                                                         subjects.code, subjects.description;
-                                                                ") or die(mysqli_error(conn()->get_conn()));
+                                                                ");
 
-                                                                while ($row = mysqli_fetch_array($query)) {
+                                                                $stmt2->bind_param("i", $stud_id);
+                                                                $stmt2->execute();
+                                                                $result2 = $stmt2->get_result();
+
+                                                                while ($row = mysqli_fetch_array($result2)) {
                                                                     $code = $row['code'];
                                                                     $description = $row['description'];
                                                                     $status = $row['status'];
