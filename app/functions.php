@@ -250,17 +250,22 @@ class DB {
     }
 
     public function __destruct() {
-        if ($this->query_result && $this->query_result !== true) {
-            try {
-                $this->query_result->free();
-            } catch (mysqli_sql_exception $e) {
-                // Ignore error if free() fails
+        if ($this->query_result instanceof mysqli_result) {
+            // Check if the result has not been freed yet
+            if (is_object($this->query_result)) {
+                try {
+                    $this->query_result->free();
+                } catch (Throwable $e) {
+                    // Log or ignore, depending on your needs
+                }
             }
         }
-        if ($this->conn) {
+    
+        if ($this->conn instanceof mysqli) {
             $this->conn->close();
         }
     }
+    
 }
 
 
