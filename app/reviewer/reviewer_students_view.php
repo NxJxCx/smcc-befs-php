@@ -126,7 +126,7 @@ while ($row = mysqli_fetch_array($query)) {
                 <input type='hidden' name='sub_id' value='{$sub_id}'>
                 <input type='hidden' name='user_id' value='{user_id()}'>
                 <input type='hidden' name='level' value='PREBOARD1'>
-                <textarea name='remarks' class='form-control' rows='2'>" . htmlspecialchars($remarks) . "</textarea>
+                <textarea name='remarks' class='form-control' rows='2'>" . htmlspecialchars($remarks ?: "") . "</textarea>
                 <button type='submit' class='btn btn-primary btn-sm mt-2'>Save</button>
             </form>
           </td>";
@@ -203,7 +203,7 @@ while ($row = mysqli_fetch_array($query)) {
                 <input type='hidden' name='user_id' value='{user_id()}'>
                 <input type='hidden' name='level' value='PREBOARD2'>
                 <input type='hidden' name='active-tab' value='Preboard'>
-                <textarea name='remarks' class='form-control' rows='2'>" . htmlspecialchars($remarks) . "</textarea>
+                <textarea name='remarks' class='form-control' rows='2'>" . htmlspecialchars($remarks ?: "") . "</textarea>
                 <button type='submit' class='btn btn-primary btn-sm mt-2'>Save</button>
             </form>
           </td>";
