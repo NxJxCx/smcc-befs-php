@@ -98,13 +98,13 @@ admin_html_head("Subjects", [
         <li class="nav-item dropdown pe-3">
 
           <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
-            <img src="<?php echo $profile_image; ?>" alt="Profile Image" class="rounded-circle" width="35" height="35" style="margin-right: 10px;">
-            <span class="d-none d-md-block dropdown-toggle ps-2"><?php echo $lname; ?></span>
+            <img src="<?= $profile_image; ?>" alt="Profile Image" class="rounded-circle" width="35" height="35" style="margin-right: 10px;">
+            <span class="d-none d-md-block dropdown-toggle ps-2"><?= $lname; ?></span>
           </a><!-- End Profile Iamge Icon -->
 
           <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
             <li class="dropdown-header">
-              <h6><?php echo $fname . " " . $lname; ?></h6>
+              <h6><?= $fname . " " . $lname; ?></h6>
             </li>
             <li>
               <hr class="dropdown-divider">
@@ -198,38 +198,42 @@ admin_html_head("Subjects", [
                 <tbody>
                   <?php
                   
-                  $query = conn()->query("
+                  $stmt1 = conn()->prepare("
                     SELECT 
-    subjects.code AS code,
-    subjects.description AS description,
-    MAX(students_subjects.status) AS status, -- Use MAX or GROUP BY to avoid duplicates
-    MAX(student_score.score) AS score,
-    MAX(student_score.total_items) AS items,
-    MAX(student_score.average) AS avg_score,
-    MAX(subject_percent.percent) AS percent,
-    MAX(student_score.remarks) AS remarks,
-    MAX(student_score.remarks2) AS remarks2
-FROM 
-    student_score
-JOIN 
-    students_subjects 
-    ON students_subjects.students_id = student_score.stud_id
-    AND students_subjects.subjects_id = student_score.sub_id -- Ensure specific matching
-JOIN 
-    subjects 
-    ON students_subjects.subjects_id = subjects.id
-LEFT JOIN 
-    subject_percent 
-    ON subject_percent.sub_id = subjects.id
-WHERE 
-    student_score.stud_id = '" . $user_id . "' 
-    AND student_score.level = 'PREBOARD1'
-    AND students_subjects.level = 'PREBOARD1'
-GROUP BY 
-    subjects.code, subjects.description;
-                ") or die(mysqli_error(conn()->get_conn()));
+                        subjects.code AS code,
+                        subjects.description AS description,
+                        MAX(students_subjects.status) AS status, -- Use MAX or GROUP BY to avoid duplicates
+                        MAX(student_score.score) AS score,
+                        MAX(student_score.total_items) AS items,
+                        MAX(student_score.average) AS avg_score,
+                        MAX(subject_percent.percent) AS percent,
+                        MAX(student_score.remarks) AS remarks,
+                        MAX(student_score.remarks2) AS remarks2
+                    FROM 
+                        student_score
+                    JOIN 
+                        students_subjects 
+                        ON students_subjects.students_id = student_score.stud_id
+                        AND students_subjects.subjects_id = student_score.sub_id -- Ensure specific matching
+                    JOIN 
+                        subjects 
+                        ON students_subjects.subjects_id = subjects.id
+                    LEFT JOIN 
+                        subject_percent 
+                        ON subject_percent.sub_id = subjects.id
+                    WHERE 
+                        student_score.stud_id = ? 
+                        AND student_score.level = 'PREBOARD1'
+                        AND students_subjects.level = 'PREBOARD1'
+                    GROUP BY 
+                        subjects.code, subjects.description;
+                  ");
+                  
+                  $stmt1->bind_param("i", $user_id);
+                  $stmt1->execute();
+                  $result1 = $stmt1->get_result();
 
-                  while ($row = mysqli_fetch_array($query)) {
+                  while ($row = $result1->fetch_array()) {
                     $code = $row['code'];
                     $description = $row['description'];
                     $status = $row['status'];
@@ -242,14 +246,14 @@ GROUP BY
                     $formatted_sum_average = number_format($avg_score, 2);
                   ?>
                     <tr>
-                      <td><?php echo $code; ?></td>
-                      <td><?php echo $description; ?></td>
-                      <td><?php echo $status; ?></td>
-                      <td><?php echo $score . " / " . $items; ?></td>
-                      <td><?php echo $formatted_sum_average; ?> %</td>
-                      <td><?php echo $percent; ?>%</td>
-                      <td style="max-width: 200px; overflow-x: auto;"><?php echo htmlspecialchars($remarks); ?></td>
-                      <td style="max-width: 200px; overflow-x: auto;"><?php echo htmlspecialchars($remarks2); ?></td>
+                      <td><?= $code; ?></td>
+                      <td><?= $description; ?></td>
+                      <td><?= $status; ?></td>
+                      <td><?= "$score / $items"; ?></td>
+                      <td><?= $formatted_sum_average; ?> %</td>
+                      <td><?= $percent; ?>%</td>
+                      <td style="max-width: 200px; overflow-x: auto;"><?= htmlspecialchars($remarks ?: ""); ?></td>
+                      <td style="max-width: 200px; overflow-x: auto;"><?= htmlspecialchars($remarks2 ?: ""); ?></td>
                     </tr>
                   <?php
                   }
@@ -275,11 +279,11 @@ GROUP BY
               <?php
               // Query to calculate the sum of the average scores for all subjects in PREBOARD 1
               $stmt = conn()->prepare("
-    SELECT SUM(average) AS total_average
-    FROM student_score
-    WHERE stud_id = ? 
-        AND level = 'PREBOARD2'
-");
+                  SELECT SUM(average) AS total_average
+                  FROM student_score
+                  WHERE stud_id = ? 
+                      AND level = 'PREBOARD2'
+              ");
 
               // Execute the query with the student ID
               $stmt->bind_param("i", $user_id);
@@ -315,39 +319,42 @@ GROUP BY
                 <tbody>
                   <?php
                   
-                  $query = conn()->query("
-                   SELECT 
-    subjects.code AS code,
-    subjects.description AS description,
-    MAX(students_subjects.status) AS status, -- Use MAX or GROUP BY to avoid duplicates
-    MAX(student_score.score) AS score,
-    MAX(student_score.total_items) AS items,
-    MAX(student_score.average) AS avg_score,
-    MAX(subject_percent.percent) AS percent,
-    MAX(student_score.remarks) AS remarks,
-    MAX(student_score.remarks2) AS remarks2
-FROM 
-    student_score
-JOIN 
-    students_subjects 
-    ON students_subjects.students_id = student_score.stud_id
-    AND students_subjects.subjects_id = student_score.sub_id -- Ensure specific matching
-JOIN 
-    subjects 
-    ON students_subjects.subjects_id = subjects.id
-LEFT JOIN 
-    subject_percent 
-    ON subject_percent.sub_id = subjects.id
-WHERE 
-    student_score.stud_id = '" . $user_id . "' 
-    AND student_score.level = 'PREBOARD2'
-    AND students_subjects.level = 'PREBOARD2'
-GROUP BY 
-    subjects.code, subjects.description;
+                  $stmt2 = conn()->prepare("
+                    SELECT 
+                        subjects.code AS code,
+                        subjects.description AS description,
+                        MAX(students_subjects.status) AS status, -- Use MAX or GROUP BY to avoid duplicates
+                        MAX(student_score.score) AS score,
+                        MAX(student_score.total_items) AS items,
+                        MAX(student_score.average) AS avg_score,
+                        MAX(subject_percent.percent) AS percent,
+                        MAX(student_score.remarks) AS remarks,
+                        MAX(student_score.remarks2) AS remarks2
+                    FROM 
+                        student_score
+                    JOIN 
+                        students_subjects 
+                        ON students_subjects.students_id = student_score.stud_id
+                        AND students_subjects.subjects_id = student_score.sub_id -- Ensure specific matching
+                    JOIN 
+                        subjects 
+                        ON students_subjects.subjects_id = subjects.id
+                    LEFT JOIN 
+                        subject_percent 
+                        ON subject_percent.sub_id = subjects.id
+                    WHERE 
+                        student_score.stud_id = ? 
+                        AND student_score.level = 'PREBOARD2'
+                        AND students_subjects.level = 'PREBOARD2'
+                    GROUP BY 
+                        subjects.code, subjects.description;
+                  ");
 
-                ") or die(mysqli_error(conn()->get_conn()));
+                  $stmt2->bind_param("i", $user_id);
+                  $stmt2->execute();
+                  $result2 = $stmt2->get_result();
 
-                  while ($row = mysqli_fetch_array($query)) {
+                  while ($row = $result2->fetch_array()) {
                     $code = $row['code'];
                     $description = $row['description'];
                     $status = $row['status'];
@@ -360,14 +367,14 @@ GROUP BY
                     $formatted_sum_average = number_format($avg_score, 2);
                   ?>
                     <tr>
-                      <td><?php echo $code; ?></td>
-                      <td><?php echo $description; ?></td>
-                      <td><?php echo $status; ?></td>
-                      <td><?php echo $score . " / " . $items; ?></td>
-                      <td><?php echo $formatted_sum_average; ?> %</td>
-                      <td><?php echo $percent; ?>%</td>
-                      <td style="max-width: 200px; overflow-x: auto;"><?php echo htmlspecialchars($remarks); ?></td>
-                      <td style="max-width: 200px; overflow-x: auto;"><?php echo htmlspecialchars($remarks2); ?></td>
+                      <td><?= $code; ?></td>
+                      <td><?= $description; ?></td>
+                      <td><?= $status; ?></td>
+                      <td><?= "$score / $items"; ?></td>
+                      <td><?= $formatted_sum_average; ?> %</td>
+                      <td><?= $percent; ?>%</td>
+                      <td style="max-width: 200px; overflow-x: auto;"><?= htmlspecialchars($remarks ?: ""); ?></td>
+                      <td style="max-width: 200px; overflow-x: auto;"><?= htmlspecialchars($remarks2 ?: ""); ?></td>
                     </tr>
                   <?php
                   }
