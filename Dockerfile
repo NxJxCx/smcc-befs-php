@@ -27,9 +27,6 @@ COPY ./php.ini /usr/local/etc/php/
 # Copy your app code
 COPY ./app /var/www/html
 
-# Copy the filemanager files
-COPY ./filemanager/index.php /var/www/html/filemanager.php
-
 # Configure NGINX
 COPY ./nginx.conf /etc/nginx/nginx.conf
 
