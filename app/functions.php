@@ -251,7 +251,11 @@ class DB {
 
     public function __destruct() {
         if ($this->query_result && $this->query_result !== true) {
-            $this->query_result->free();
+            try {
+                $this->query_result->free();
+            } catch (mysqli_sql_exception $e) {
+                // Ignore error if free() fails
+            }
         }
         if ($this->conn) {
             $this->conn->close();
