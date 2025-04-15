@@ -267,7 +267,7 @@ admin_html_head("Student Profile", [
                                                                 $stmt1->execute();
                                                                 $result1 = $stmt1->get_result();
 
-                                                                while ($row = mysqli_fetch_array($result1)) {
+                                                                while ($row = $result1->fetch_array()) {
                                                                     $code = $row['code'];
                                                                     $description = $row['description'];
                                                                     $status = $row['status'];
@@ -358,7 +358,7 @@ admin_html_head("Student Profile", [
                                                                 $stmt2->execute();
                                                                 $result2 = $stmt2->get_result();
 
-                                                                while ($row = mysqli_fetch_array($result2)) {
+                                                                while ($row = $result2->fetch_array()) {
                                                                     $code = $row['code'];
                                                                     $description = $row['description'];
                                                                     $status = $row['status'];
