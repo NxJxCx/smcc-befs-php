@@ -35,8 +35,8 @@ if ($row = mysqli_fetch_array($query)) {
       <h1>List of Students</h1>
       <nav>
         <ol class="breadcrumb">
-          <li class="breadcrumb-item"><a href="faculty_home">Dashboard</a></li>
-          <li class="breadcrumb-item"><a href="faculty_subjects">Subjects</a></li>
+          <li class="breadcrumb-item"><a href="dean_home_page">Dashboard</a></li>
+          <li class="breadcrumb-item"><a href="dean/dean_subjects">Subjects</a></li>
           <li class="breadcrumb-item">List of Students</li>
         </ol>
       </nav>
@@ -125,7 +125,7 @@ while ($row = mysqli_fetch_array($query)) {
                 <input type='hidden' name='user_id' value='{user_id()}'>
                 <input type='hidden' name='level' value='PREBOARD1'>
                 <input type='hidden' name='tab' value='preboard1'> 
-                <textarea name='remarks' class='form-control' rows='2'>" . htmlspecialchars($remarks2) . "</textarea>
+                <textarea name='remarks' class='form-control' rows='2'>" . htmlspecialchars($remarks2 ?: "") . "</textarea>
                 <button type='submit' class='btn btn-primary btn-sm mt-2'>Save</button>
             </form>
           </td>";
@@ -202,7 +202,7 @@ while ($row = mysqli_fetch_array($query)) {
                 <input type='hidden' name='user_id' value='{user_id()}'>
                 <input type='hidden' name='level' value='PREBOARD2'>
                 <input type='hidden' name='tab' value='preboard2'> 
-                <textarea name='remarks' class='form-control' rows='2'>" . htmlspecialchars($remarks2) . "</textarea>
+                <textarea name='remarks' class='form-control' rows='2'>" . htmlspecialchars($remarks2 ?: "") . "</textarea>
                 <button type='submit' class='btn btn-primary btn-sm mt-2'>Save</button>
             </form>
           </td>";

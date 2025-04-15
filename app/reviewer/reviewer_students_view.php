@@ -35,8 +35,8 @@ admin_html_head("Students", [
       <h1>List of Students</h1>
       <nav>
         <ol class="breadcrumb">
-          <li class="breadcrumb-item"><a href="faculty_home">Dashboard</a></li>
-          <li class="breadcrumb-item"><a href="faculty_subjects">Subjects</a></li>
+          <li class="breadcrumb-item"><a href="dean_home_page">Dashboard</a></li>
+          <li class="breadcrumb-item"><a href="dean/dean_subjects">Subjects</a></li>
           <li class="breadcrumb-item">List of Students</li>
         </ol>
       </nav>
