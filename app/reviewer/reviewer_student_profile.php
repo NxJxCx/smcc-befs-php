@@ -345,7 +345,7 @@ admin_html_head("Student Profile", [
                                                                         ON ssj.subjects_id = sj.id
                                                                     LEFT JOIN 
                                                                         subject_percent AS sp  
-                                                                        ON sp.sub_id = subjects.id
+                                                                        ON sp.sub_id = sj.id
                                                                     WHERE 
                                                                         ssc.stud_id = ? 
                                                                         AND ssc.level = 'PREBOARD2'
