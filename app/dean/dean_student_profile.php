@@ -376,7 +376,7 @@ admin_html_head("Student Profile", [
                                                                         subject_percent 
                                                                         ON subject_percent.sub_id = subjects.id
                                                                     WHERE 
-                                                                        student_score.stud_id = '$stud_id' 
+                                                                        student_score.stud_id = ? 
                                                                         AND student_score.level = 'PREBOARD2'
                                                                         AND students_subjects.level = 'PREBOARD2'
                                                                     GROUP BY 
