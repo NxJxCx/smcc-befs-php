@@ -284,8 +284,8 @@ admin_html_head("Student Profile", [
                                                                         <td><?= $score . " / " . $items; ?></td>
                                                                         <td><?= $formatted_avg_score; ?> %</td>
                                                                         <td><?= $percent; ?>%</td>
-                                                                        <td style="max-width: 200px; overflow-x: auto;"><?= htmlspecialchars($remarks); ?></td>
-                                                                        <td style="max-width: 200px; overflow-x: auto;"><?= htmlspecialchars($remarks2); ?></td>
+                                                                        <td style="max-width: 200px; overflow-x: auto;"><?= htmlspecialchars($remarks ?: ""); ?></td>
+                                                                        <td style="max-width: 200px; overflow-x: auto;"><?= htmlspecialchars($remarks2 ?: ""); ?></td>
                                                                     </tr>
                                                                 <?php
                                                                 }
@@ -368,11 +368,11 @@ admin_html_head("Student Profile", [
                                                                         <td><?= $code; ?></td>
                                                                         <td><?= $description; ?></td>
                                                                         <td><?= $status; ?></td>
-                                                                        <td><?= $score . " / " . $items; ?></td>
+                                                                        <td><?= "$score  / $items" ?></td>
                                                                         <td><?= $formatted_sum_average; ?> %</td>
                                                                         <td><?= $percent; ?>%</td>
-                                                                        <td style="max-width: 200px; overflow-x: auto;"><?= htmlspecialchars($remarks); ?></td>
-                                                                        <td style="max-width: 200px; overflow-x: auto;"><?= htmlspecialchars($remarks2); ?></td>
+                                                                        <td style="max-width: 200px; overflow-x: auto;"><?= htmlspecialchars($remarks ?: ""); ?></td>
+                                                                        <td style="max-width: 200px; overflow-x: auto;"><?= htmlspecialchars($remarks2 ?: ""); ?></td>
                                                                     </tr>
                                                                 <?php
                                                                 }
