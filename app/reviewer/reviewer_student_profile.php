@@ -41,7 +41,7 @@ if ($row = $result->fetch_array()) {
     $about = $row['about'];
     $student_profile_image = $row['student_profile_image'];
 } else {
-    echo "Error: " . mysqli_error(conn()->get_conn());
+    die("Error: " . mysqli_error(conn()->get_conn()));
 }
 
 // Fetch subject count using prepared statement
@@ -164,7 +164,7 @@ admin_html_head("Student Profile", [
                                         </div>
                                         <div class="row">
                                             <div class="col-lg-3 col-md-4 label ">Subject Counts</div>
-                                            <div class="col-lg-9 col-md-8"><?= $sub_count > 0 ?: "<span class='badge bg-danger'>Empty</span>"; ?></div>
+                                            <div class="col-lg-9 col-md-8"><?= $sub_count > 0 ? $subcount : "<span class='badge bg-danger'>Empty</span>"; ?></div>
                                         </div>
                                         <div class="row">
                                             <div class="col-lg-3 col-md-4 label ">Status</div>
@@ -392,12 +392,10 @@ admin_html_head("Student Profile", [
             </div>
         </section>
     </main>
-    <?= "testing "; ?>
     <?php admin_html_body_end([
         // ["type" => "script", "src" => "assets/vendor/simple-datatables/simple-datatables.js"],
         ["type" => "script", "src" => "assets/js/main.js"],
     ]); ?>
-    <?= "testing 2 "; ?>
 
 </body>
 
