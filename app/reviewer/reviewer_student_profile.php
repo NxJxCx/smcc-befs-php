@@ -103,10 +103,10 @@ admin_html_head("Student Profile", [
                         <div class="card-body pt-3">
                             <ul class="nav nav-tabs nav-tabs-bordered">
                                 <li class="nav-item">
-                                    <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#profile-overview">Overview</button>
+                                    <button type="button" class="nav-link active" data-bs-toggle="tab" data-bs-target="#profile-overview">Overview</button>
                                 </li>
                                 <li class="nav-item">
-                                    <button class="nav-link" data-bs-toggle="tab" data-bs-target="#student-results">Results</button>
+                                    <button type="button" class="nav-link" data-bs-toggle="tab" data-bs-target="#student-results">Results</button>
                                 </li>
                             </ul>
 
@@ -238,13 +238,13 @@ admin_html_head("Student Profile", [
                                                                     SELECT 
                                                                         subjects.code AS code,
                                                                         subjects.description AS description,
-                                                                        students_subjects.status AS status,
-                                                                        student_score.score AS score,
-                                                                        student_score.total_items AS items,
-                                                                        student_score.average AS avg_score,
-                                                                        subject_percent.percent AS percent,
-                                                                        student_score.remarks AS remarks,
-                                                                        student_score.remarks2 AS remarks2
+                                                                        MAX(students_subjects.status) AS status,
+                                                                        MAX(student_score.score) AS score,
+                                                                        MAX(student_score.total_items) AS items,
+                                                                        MAX(student_score.average) AS avg_score,
+                                                                        MAX(subject_percent.percent) AS percent,
+                                                                        MAX(student_score.remarks) AS remarks,
+                                                                        MAX(student_score.remarks2) AS remarks2
                                                                     FROM 
                                                                         student_score
                                                                     JOIN 
