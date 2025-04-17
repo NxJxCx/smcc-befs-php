@@ -26,15 +26,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'):
         $filepath = "/training_datasets/";
                 
         // File handling
-        $upload_dir = dirname(__DIR__) . DIRECTORY_SEPARATOR . trim(str_replace("/", DIRECTORY_SEPARATOR, $filepath), DIRECTORY_SEPARATOR); // Ensure this directory exists
-        if (!is_dir($upload_dir)) {
-            $hasMade = mkdir($upload_dir, 0777, true);
-        }
+        // $upload_dir = dirname(__DIR__) . DIRECTORY_SEPARATOR . trim(str_replace("/", DIRECTORY_SEPARATOR, $filepath), DIRECTORY_SEPARATOR); // Ensure this directory exists
+        // if (!is_dir($upload_dir)) {
+        //     $hasMade = mkdir($upload_dir, 0777, true);
+        // }
 
         $file_tmp_path = $files['tmp_name'];
-        $file_dest_path = $upload_dir . DIRECTORY_SEPARATOR . $filename;
+        $file_tmp_path_dest = $files['tmp_name'] . "." . pathinfo($filename, PATHINFO_EXTENSION);
+        // $file_dest_path = $upload_dir . DIRECTORY_SEPARATOR;
         
-        if (move_uploaded_file($file_tmp_path, $file_dest_path)) {
+        if (move_uploaded_file($file_tmp_path, $file_tmp_path_dest)) {
+            // Upload to external storage
+            $respd = uploadToStorageApi($file_tmp_path_dest, "text/csv", $filename, $filepath);
+            debug_out(json_encode(
+                $respd
+            ));
             $fullfilepath = "$filepath$filename";
             echo json_encode(["success" => true, "filepath" => $fullfilepath ]);
         } else {

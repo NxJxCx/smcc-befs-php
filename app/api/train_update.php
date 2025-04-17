@@ -15,16 +15,30 @@ if ($_SERVER['REQUEST_METHOD'] === "POST"):
         http_response_code(400);
         die(json_encode(['detail' => 'Bad Request']));
     }
-    $STATE_BASE_DIR = dirname(__DIR__) . DIRECTORY_SEPARATOR . "training_states";
-    $filepath = $STATE_BASE_DIR . DIRECTORY_SEPARATOR . "$token.json";
-    if (is_file($filepath)) {
-        $f = file_get_contents($filepath);
+    $folderPath = "/training_states/";
+    $filename = "$token.json";
+    // $STATE_BASE_DIR = dirname(__DIR__) . DIRECTORY_SEPARATOR . "training_states";
+    // $filepath = $STATE_BASE_DIR . DIRECTORY_SEPARATOR . $filename;
+    // if (is_file($filepath)) {
+    //     $f = file_get_contents($filepath);
+    //     $session = json_decode($f, true);
+    //     if (($session["username"] ?? null) === $username && ($session['session_key'] ?? null) === $session_key && ($session['token'] ?? null) === $token && ($session['algo'] ?? null) === $algo) {
+    //         $session["state"] = $data;
+    //         file_put_contents($filepath, json_encode($session, JSON_PRETTY_PRINT));
+    //         die(json_encode(["success" => true]));
+    //     }
+    // }
+
+    try {
+        $f = getFileFromStorageApi($filename, "application/json", $folderPath);
         $session = json_decode($f, true);
         if (($session["username"] ?? null) === $username && ($session['session_key'] ?? null) === $session_key && ($session['token'] ?? null) === $token && ($session['algo'] ?? null) === $algo) {
             $session["state"] = $data;
-            file_put_contents($filepath, json_encode($session, JSON_PRETTY_PRINT));
+            $respd = uploadToStorageApi($filename, json_encode($session, JSON_PRETTY_PRINT), "application/json", $folderPath);
             die(json_encode(["success" => true]));
         }
+    } catch (Exception $e) {
+        // skip error
     }
 
     echo json_encode(["success" => false]);

@@ -40,12 +40,7 @@ if ($row = mysqli_fetch_array($query)) {
     $sec_desc = $row['sec_desc'];
     $about = $row['about'];
     $level = $row['level'];
-    $profile_image = base_url() . "/" . $row['profile_image'];
-
-    // Set a default profile image if none is provided
-    if (empty($row['profile_image'])) {
-        $profile_image = base_url() . "/assets/img/profile-img2.jpg";
-    }
+    $profile_image = !empty($row['profile_image']) ? external_storage_api_url() . "/files/" . $row['profile_image'] : base_url() . "/assets/img/profile-img2.jpg";
 } else {
     // Handle case where student is not found
     echo "<script>alert('Student not found.');</script>";

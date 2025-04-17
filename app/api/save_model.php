@@ -40,10 +40,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'):
         echo json_encode(["success" => true, "detail" => "Model saved successfully." ]);
     } catch (Exception $e) {
         if ($filename !== null) {
-            $upload_dir = dirname(__DIR__) . DIRECTORY_SEPARATOR . trim(str_replace("/", DIRECTORY_SEPARATOR, $filepath), DIRECTORY_SEPARATOR); // Ensure this directory exists
-            $file_dest_path = $upload_dir . DIRECTORY_SEPARATOR . $filename . $file_extension;
-            if (is_file($file_dest_path)) {
-                unlink($file_dest_path);
+            // $upload_dir = dirname(__DIR__) . DIRECTORY_SEPARATOR . trim(str_replace("/", DIRECTORY_SEPARATOR, $filepath), DIRECTORY_SEPARATOR); // Ensure this directory exists
+            // $file_dest_path = $upload_dir . DIRECTORY_SEPARATOR . $filename . $file_extension;
+            // if (is_file($file_dest_path)) {
+            //     unlink($file_dest_path);
+            // }
+            try {
+                $full_filename = "{$filename}{$file_extension}";
+                $respd = deleteFromStorageApi( $full_filename, $filepath);
+                debug_out(json_encode(
+                    $respd
+                ));
+            } catch (Exception $err) {
+                // http_response_code(404);
+                // die(json_encode(["success" => false, "detail" => $err->getMessage()]));
+                debug_out(json_encode(
+                    ["error_delete_on_save_model_error" => $err->getMessage()]
+                ));
             }
         }
         echo json_encode(["success" => false, "detail" => $e->getMessage()]);

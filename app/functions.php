@@ -7,6 +7,17 @@ function get_base_uri_path()
     return $_ENV['BEFS_BASE_URI'] ?? "/smcc-befs";
 }
 
+function base_url(): string
+{
+    $scheme = "https";
+
+    // Split host by colon and take only the hostname (drop :9000)
+    $hostParts = explode(':', $_SERVER['HTTP_HOST']);
+    $host = $hostParts[0];
+
+    return "{$scheme}://{$host}" . get_base_uri_path();
+}
+
 function base_api_uri()
 {
     return $_ENV['BEFS_API_BASE_URL'] ?? 'http://localhost:5000';
@@ -23,6 +34,96 @@ function check_api_key($api_key)
         http_response_code(401);
         die(json_encode(['detail' => "Invalid Access"]));
     }
+}
+
+function external_storage_api_url(): string
+{
+    return $_ENV['BEFS_EXTERNAL_STORAGE_API_URL'] ?? base_url();
+}
+
+function uploadToStorageApi(string $originalPath, string $mimeType, string $newFilename, string $folderDirectory = ""): string
+{
+    $url = external_storage_api_url();
+    $folderDirectory = strlen($folderDirectory) === 0 ? "" : "/to/" . trim($folderDirectory, "/");
+    $ch = curl_init("{$url}/upload{$folderDirectory}");
+    $curlFile = new \CURLFile(
+        $originalPath,
+        $mimeType,
+        $newFilename
+    );
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_POST, true);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, [
+        'file' => $curlFile,
+    ]);
+
+    $response = curl_exec($ch);
+
+    if (curl_errno($ch)) {
+      throw new \Exception('Upload error: ' . curl_error($ch));
+    }
+
+    curl_close($ch);
+    return $response;
+}
+
+function deleteFromStorageApi(string $filename, string $folderDirectory = ""): string
+{
+    $url = external_storage_api_url();
+    $folderDirectory = strlen($folderDirectory) === 0 ? "" : "/from/" . trim($folderDirectory, "/");
+    $ch = curl_init("{$url}/delete{$folderDirectory}");
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_POST, true);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, [
+        'filename' => $filename,
+    ]);
+    $response = curl_exec($ch);
+    if (curl_errno($ch)) {
+        throw new \Exception('Delete error: ' . curl_error($ch));
+    }
+    curl_close($ch);
+    return $response;
+}
+
+
+function getFileFromStorageApi(string $filename, string $mimeType = "text/plain", string $folderDirectory = ""): string
+{
+    $url = external_storage_api_url();
+    $folderDirectory = strlen($folderDirectory) === 0 ? "" : "/to/" . trim($folderDirectory, "/");
+    $ch = curl_init("{$url}/files{$folderDirectory}");
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, [
+       "Content-Type: {$mimeType}"
+    ]);
+    $response = curl_exec($ch);
+    $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    if (curl_errno($ch)) {
+        throw new \Exception('Fetch error: ' . curl_error($ch));
+    }
+    curl_close($ch);
+    if ($httpCode === 404) {
+        throw new \Exception("File not found: {$filename}");
+    } elseif ($httpCode >= 400) {
+        throw new \Exception("HTTP error {$httpCode} while fetching file: {$filename}");
+    }
+    return $response;
+}
+
+function globAllFilesFromStorageApi(string $folderDirectory = ""): array
+{
+    $url = external_storage_api_url();
+    $folderDirectory = strlen($folderDirectory) === 0 ? "" : "/" . trim($folderDirectory, "/");
+    $ch = curl_init("{$url}/allfiles{$folderDirectory}");
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, [
+       "Content-Type: application/json"
+    ]);
+    $response = curl_exec($ch);
+    if (curl_errno($ch)) {
+        throw new \Exception('Fetch error: ' . curl_error($ch));
+    }
+    curl_close($ch);
+    return json_decode($response, true) ?? [];
 }
 
 function enable_CORS() {
@@ -332,23 +433,6 @@ function redirect_to_no_php_path()
     }
 }
 
-function base_url(): string
-{
-    $scheme = "https";
-    $r1 = "{$scheme}://" . $_SERVER['HTTP_HOST'] . get_base_uri_path();
-
-    if (strpos($_SERVER['HTTP_HOST'], ':') === false) {
-        // No port in the host, return as is
-        return $r1;
-    } else {
-
-        // Split host by colon and take only the hostname (drop :9000)
-        $hostParts = explode(':', $_SERVER['HTTP_HOST']);
-        $host = $hostParts[0];
-
-        return "{$scheme}://{$host}" . get_base_uri_path();
-    }
-}
 
 function get_uri_path()
 {
@@ -597,7 +681,10 @@ function default_html_head(string $title_page = "Login", array $imports = [])
 function default_html_body_end(array $imports = [])
 {
 ?>
-<script>window.BASE_URL = `<?= base_url() ?>`;</script>
+<script>
+    window.BASE_URL = `<?= base_url() ?>`;
+    window.STORAGE_API_URL = `<?= external_storage_api_url() ?>`;
+</script>
 <?php foreach ($imports as $import_item):
         switch ($import_item['type'] ?? ""):
             case 'script': ?>

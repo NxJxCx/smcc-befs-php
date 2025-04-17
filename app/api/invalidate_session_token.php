@@ -12,11 +12,21 @@ if ($_SERVER['REQUEST_METHOD'] === "POST"):
         http_response_code(400);
         die(json_encode(["detail" => "Bad Request"]));
     }
-    $STATE_BASE_DIR = dirname(__DIR__) . DIRECTORY_SEPARATOR . "training_states";
-    $filepath = $STATE_BASE_DIR . DIRECTORY_SEPARATOR ."$token.json";
-    if (is_file($filepath)) {
-        unlink($filepath);
+    $folderPath = "/training_states/";
+    $filename = "$token.json";
+    // $STATE_BASE_DIR = dirname(__DIR__) . DIRECTORY_SEPARATOR . "training_states";
+    // $filepath = $STATE_BASE_DIR . DIRECTORY_SEPARATOR . $filename;
+    
+    // if (is_file($filepath)) {
+    //     unlink($filepath);
+    // }
+
+    try {
+        $respd = deleteFromStorageApi($filename, $folderPath);
+    } catch (Exception $e) {
+        // skip error
     }
+
     echo json_encode(["success" => true, "detail" => "OK"]);
 else:
     http_response_code(401);

@@ -23,7 +23,7 @@ admin_html_head("Pending Students", [
       $fname = ucfirst(strtolower($row['fname']));
       $lname = ucfirst(strtolower($row['lname']));
       $type = ucfirst(strtolower($row['type']));
-      $profile_image = $row['profile_image'];  // Assuming this field stores the image path
+      $profile_image = !empty($row['profile_image']) ? external_storage_api_url() . "/files/" . $row['profile_image'] : base_url() . '/assets/img/profile-img2.jpg';
       $course_id = $row['course_id'];
   } else {
       die("Dean not found or no associated course.");

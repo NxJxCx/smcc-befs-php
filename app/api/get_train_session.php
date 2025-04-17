@@ -14,14 +14,33 @@ if ($_SERVER['REQUEST_METHOD'] === "GET"):
         http_response_code(400);
         die(json_encode(["detail" => "Bad Request"]));
     }
-
-    $STATE_BASE_DIR = dirname(__DIR__) . DIRECTORY_SEPARATOR . "training_states";
-    $allSessions = glob($STATE_BASE_DIR . DIRECTORY_SEPARATOR . "*.json");
+    $folderPath = "/training_states/";
+    // $STATE_BASE_DIR = dirname(__DIR__) . DIRECTORY_SEPARATOR . "training_states";
+    // $allSessions = glob($STATE_BASE_DIR . DIRECTORY_SEPARATOR . "*.json");
+    try {
+        $files = globAllFilesFromStorageApi($folderPath);
+        if (array_key_exists("files", $files)) {
+            $allSessions = array_filter($files["files"], fn($f) => str_ends_with($f, ".json"));
+        } else {
+            throw new Exception("Failed to retrieve files from storage API");
+        }
+    } catch (Exception $e) {
+        die(json_encode(["detail" => $e->getMessage()]));
+    }
     $session = null;
-
     foreach ($allSessions as $s) {
-        if ($train_token === null || $train_token === pathinfo(basename($s), PATHINFO_FILENAME)) {
-            $f = file_get_contents($s);
+        $jsonFilename = pathinfo(basename($s), PATHINFO_FILENAME);
+        $jsonFullFilename = "$folderPath$jsonFilename.json";
+        if ($train_token === null || $train_token === $jsonFilename) {
+            // $f = file_get_contents($s);
+            try {
+                $f = getFileFromStorageApi($jsonFullFilename, "application/json", $folderPath);
+                if ($f === null || $f === false || strlen($f) === 0) {
+                    continue;
+                }
+            } catch (Exception $e) {
+                continue;
+            }
             $sess = json_decode($f, true);
             if (($sess["username"] ?? null) === $username && ($sess["session_key"] ?? null) === $session_key && ($sess[""] ?? null) === $algo) {
                 $session = $s;

@@ -29,7 +29,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     async function ml_inference_session(model_path = '/inference/logistic_regression.onnx') {
         try {
-            url_model = `${BASE_URL || window.location.origin}${model_path}`;
+            url_model = `${STORAGE_API_URL || BASE_URL || window.location.origin}${model_path}`;
             const session = await ort.InferenceSession.create(url_model);
             return {
                 session,

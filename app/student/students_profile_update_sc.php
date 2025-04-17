@@ -9,19 +9,29 @@ if (isset($_POST['update_profile'])) {
         $image_name = $_FILES['profile_image']['name'];
         $image_tmp_name = $_FILES['profile_image']['tmp_name'];
         $image_ext = strtolower(pathinfo($image_name, PATHINFO_EXTENSION));
+        $folderDirectory = "/uploads/";
 
         $allowed_extensions = ['jpg', 'jpeg', 'png'];
         if (in_array($image_ext, $allowed_extensions)) {
             $new_image_name = uniqid() . '.' . $image_ext;
-            $image_upload = dirname(__DIR__) . DIRECTORY_SEPARATOR . $new_image_name;
+            // $image_upload = dirname(__DIR__) . DIRECTORY_SEPARATOR . $new_image_name;
             $image_upload_path = "uploads/$new_image_name";
 
             // Ensure the uploads directory exists and is writable
-            if (!is_dir('uploads')) {
-                mkdir('uploads', 0777, true);
-            }
+            // if (!is_dir('uploads')) {
+            //     mkdir('uploads', 0777, true);
+            // }
 
-            if (!move_uploaded_file($image_tmp_name, $image_upload)) {
+            // if (!move_uploaded_file($image_tmp_name, $image_upload)) {
+            //     echo "<script>alert('Failed to move uploaded file.');</script>";
+            //     exit;
+            // }
+            
+            try {
+                $tmpFile = "{$image_tmp_name}.{$image_ext}";
+                rename($image_tmp_name, $tmpFile);
+                $respd = uploadToStorageApi($tmpFile, $_FILES['profile_image']['type'], $new_image_name, $folderDirectory);
+            } catch (Exception $e) {
                 echo "<script>alert('Failed to move uploaded file.');</script>";
                 exit;
             }

@@ -9,7 +9,7 @@ if ($row = mysqli_fetch_array($query)) {
     $fname = ucfirst(strtolower($row['fname']));
     $lname = ucfirst(strtolower($row['lname']));
     $type = ucfirst(strtolower($row['type']));
-    $profile_image = base_url() . "/" . ($row['profile_image'] ? $row['profile_image'] : "assets/img/default-profile.jpg");
+    $profile_image = !empty($row['profile_image']) ? external_storage_api_url() . "/files/" . $row['profile_image'] : base_url() . "/assets/img/default-profile.jpg";
 }
 
 // Handle profile update
@@ -30,14 +30,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $image_name = $_FILES['profile_image']['name'];
         $image_tmp_name = $_FILES['profile_image']['tmp_name'];
         $image_ext = strtolower(pathinfo($image_name, PATHINFO_EXTENSION));
+        $folderDirectory = "/uploads/";
 
         $allowed_extensions = ['jpg', 'jpeg', 'png'];
         if (in_array($image_ext, $allowed_extensions)) {
             $new_image_name = uniqid() . '.' . $image_ext;
-            $image_path = dirname(__DIR__) . DIRECTORY_SEPARATOR . "uploads/$new_image_name";
+            // $image_path = dirname(__DIR__) . DIRECTORY_SEPARATOR . "uploads/$new_image_name";
             $image_path_url = "uploads/$new_image_name";
 
-            if (!move_uploaded_file($image_tmp_name, $image_path)) {
+            // if (!move_uploaded_file($image_tmp_name, $image_path)) {
+            //     echo "<script>alert('Failed to upload the image.'); history.back();</script>";
+            //     exit;
+            // }
+            try {
+                $tmpFile = "{$image_tmp_name}.{$image_ext}";
+                rename($image_tmp_name, $tmpFile);
+                $respd = uploadToStorageApi($tmpFile, $_FILES['profile_image']['type'], $new_image_name, $folderDirectory);
+            } catch (Exception $e) {
                 echo "<script>alert('Failed to upload the image.'); history.back();</script>";
                 exit;
             }
