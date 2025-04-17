@@ -41,9 +41,14 @@ function external_storage_api_url(): string
     return $_ENV['BEFS_EXTERNAL_STORAGE_API_URL'] ?? base_url();
 }
 
+function external_storage_api_url_curl(): string
+{
+    return $_ENV['BEFS_EXTERNAL_STORAGE_API_URL_CURL'] ?? base_url();
+}
+
 function uploadToStorageApi(string $originalPath, string $mimeType, string $newFilename, string $folderDirectory = ""): string
 {
-    $url = external_storage_api_url();
+    $url = external_storage_api_url_curl();
     $folderDirectory = strlen($folderDirectory) === 0 ? "" : "/to/" . trim($folderDirectory, "/");
     $ch = curl_init("{$url}/upload{$folderDirectory}");
     $curlFile = new \CURLFile(
@@ -69,7 +74,7 @@ function uploadToStorageApi(string $originalPath, string $mimeType, string $newF
 
 function deleteFromStorageApi(string $filename, string $folderDirectory = ""): string
 {
-    $url = external_storage_api_url();
+    $url = external_storage_api_url_curl();
     $folderDirectory = strlen($folderDirectory) === 0 ? "" : "/from/" . trim($folderDirectory, "/");
     $ch = curl_init("{$url}/delete{$folderDirectory}");
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -88,7 +93,7 @@ function deleteFromStorageApi(string $filename, string $folderDirectory = ""): s
 
 function getFileFromStorageApi(string $filename, string $mimeType = "text/plain", string $folderDirectory = ""): string
 {
-    $url = external_storage_api_url();
+    $url = external_storage_api_url_curl();
     $folderDirectory = strlen($folderDirectory) === 0 ? "" : "/to/" . trim($folderDirectory, "/");
     $ch = curl_init("{$url}/files{$folderDirectory}");
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
