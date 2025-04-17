@@ -688,7 +688,7 @@ function default_html_body_end(array $imports = [])
 ?>
 <script>
     window.BASE_URL = `<?= base_url() ?>`;
-    window.STORAGE_API_URL = `<?= external_storage_api_url() ?>`;
+    window.STORAGE_API_URL = `<?= external_storage_api_url() ?>/files`;
 </script>
 <?php foreach ($imports as $import_item):
         switch ($import_item['type'] ?? ""):
