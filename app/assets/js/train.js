@@ -361,25 +361,7 @@ $(function () {
             if (!!data.ended_at) {
                 const dateEnded = (new Date(data.ended_at)).toLocaleString('en-US', { month: "short", day: "numeric", year: "numeric", hour12: true, hour: "numeric", minute: "numeric"});
                 window.location.href = `${BASE_URL}/admin/admin_train`;
-                $invalidate_url = `${BASE_URL}/api/invalidate_session?api_key=${window.sessionStorage.getItem("TRAIN_API_KEY")}`
-                $.ajax({
-                    url: $invalidate_url,
-                    type: "POST",
-                    contentType: "application/json",
-                    data: JSON.stringify({
-                        username: data.username,
-                        session_key: data.session_id,
-                        token: data.token,
-                    }),
-                    success: function({ success, detail }) {
-                        console.log(detail);
-                        alert("Session Ended at " + dateEnded);
-                    },
-                    error: function(err, statusText) {
-                        console.log(err);
-                        alert("ERROR Ending session: " + statusText);
-                    }
-                });
+                alert("Session Ended at " + dateEnded);
                 return;
             }
             const $alertConn = $("#trainingAlertConnectionStatus");
