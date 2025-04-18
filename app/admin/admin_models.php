@@ -13,6 +13,23 @@ if ($_SERVER['REQUEST_METHOD'] === "POST"): // POST METHOD
   }
   switch ($action) {
     case "delete":
+      $qs = "SELECT id FROM `inference_model` WHERE id = ?";
+      $stmt = conn()->prepare($qs);
+      $stmt->bind_param("s", $model_id);
+      $stmt->execute();
+      $rs = $stmt->get_result();
+      if ($row = $rs->fetch_assoc()) {
+        $filename = $row["filename"];
+        $file_extension = $row["file_extension"];
+        $filename = "{$filename}{$file_extension}";
+        $folderPath = $row["filepath"];
+        try {
+          $resp = deleteFromStorageApi($filename, $folderPath);
+        } catch (Exception $err) {
+          http_response_code(500);
+          die("Failed to delete model file from storage.");
+        }
+      }
       $q = "DELETE FROM `inference_model` WHERE id = ?";
       $stmt = conn()->prepare($q);
       $stmt->bind_param("s", $model_id);
