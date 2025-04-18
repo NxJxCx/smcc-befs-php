@@ -4,9 +4,13 @@ try {
 } catch (Exception $e) {
     $log = null;
 }
-$log = $log === null ? "No log file found." : $log;
-$log = str_replace("\r\n", "<br>", $log);
-$log = str_replace("\n", "<br>", $log);
+if ($log !== null) {
+    $l = explode("\n", $log);
+    $log = array_map(fn($line) => "<div>" . str_replace("\r", "", $line) . "</div>", $l);
+    $log = implode("<br>", $log);
+} else {
+    $log = "No log file found";
+}
 ?>
 <code style="white-space: pre-wrap; background-color: #f4f4f4; padding: 10px; border-radius: 5px; font-family: monospace; font-size: 14px;">
     <?= $log ?>
