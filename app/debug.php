@@ -1,6 +1,6 @@
 <?php
 try {
-    $log = getFileFromStorageApi("debug.log", "text/plain", "/debug/");
+    $log = getFileFromStorageApi("debug.log", "text/plain", "/debug/", false);
 } catch (Exception $e) {
     $log = null;
 }

@@ -91,11 +91,13 @@ function deleteFromStorageApi(string $filename, string $folderDirectory = ""): s
 }
 
 
-function getFileFromStorageApi(string $filename, string $mimeType = "text/plain", string $folderDirectory = ""): string
+function getFileFromStorageApi(string $filename, string $mimeType = "text/plain", string $folderDirectory = "", bool $out_debug = true): string
 {
     $url = external_storage_api_url_curl();
     $folderDirectory = strlen($folderDirectory) === 0 ? "" : "/" . trim($folderDirectory, "/");
-    debug_out("[Storage GET] Getting file from storage location: " . "{$url}/files{$folderDirectory}/{$filename}");
+    if ($out_debug) {
+        debug_out("[Storage GET] Getting file from storage location: " . "{$url}/files{$folderDirectory}/{$filename}");
+    }
     $ch = curl_init("{$url}/files{$folderDirectory}/{$filename}");
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($ch, CURLOPT_HTTPHEADER, [
@@ -792,7 +794,9 @@ function debug_out(string $message)
     try {
         $__tmpFile = tempnam(sys_get_temp_dir(), 'debug_');
         rename($__tmpFile, $__tmpFile .= ".log");
-        file_put_contents($__tmpFile, "[DEBUG]: $message" . PHP_EOL, FILE_APPEND);
+        $getfile = getFileFromStorageApi("debug.log", "text/plain", "/debug/", false);
+        $getfile .= "[DEBUG]: " . date("Y-m-d H:i:s") . $message . PHP_EOL;
+        file_put_contents($__tmpFile, $getfile, FILE_APPEND);
         uploadToStorageApi($__tmpFile, "text/plain", "debug.log", "/debug/");
     } catch (\Throwable $e) {
         // Handle error if needed
