@@ -27,7 +27,7 @@ try {
 }
 $api_pages = array_map(fn($page) => "/inference/{$page}", array_diff($inference_models["files"] ?? [], ['.', '..']));
 ?>
-<br><br>Model Pages:<br>
+<br><br>AI Models:<br>
 <?php
 foreach ($api_pages as $page):
 ?>
