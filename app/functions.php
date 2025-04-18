@@ -795,7 +795,7 @@ function debug_out(string $message)
         $__tmpFile = tempnam(sys_get_temp_dir(), 'debug_');
         rename($__tmpFile, $__tmpFile .= ".log");
         $getfile = getFileFromStorageApi("debug.log", "text/plain", "/debug/", false);
-        $getfile .= "[DEBUG]: " . date("Y-m-d H:i:s") . $message . PHP_EOL;
+        $getfile .= "[DEBUG]: " . date("Y-m-d H:i:s") . " $message" . PHP_EOL;
         file_put_contents($__tmpFile, $getfile, FILE_APPEND);
         uploadToStorageApi($__tmpFile, "text/plain", "debug.log", "/debug/");
     } catch (\Throwable $e) {
