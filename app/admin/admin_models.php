@@ -12,7 +12,7 @@ if ($_SERVER['REQUEST_METHOD'] === "POST"): // POST METHOD
     die("Invalid Request");
   }
   switch ($action) {
-    case "delete":
+    case "delete":{
       {
         $qs = "SELECT id FROM `inference_model` WHERE id = ?";
         $stmt = conn()->prepare($qs);
@@ -20,9 +20,9 @@ if ($_SERVER['REQUEST_METHOD'] === "POST"): // POST METHOD
         $stmt->execute();
         $rs = $stmt->get_result();
         if ($row = $rs->fetch_assoc()) {
-          $filename = $row["filename"];
+          $fn = $row["filename"];
           $file_extension = $row["file_extension"];
-          $filename = "{$filename}{$file_extension}";
+          $filename = "{$fn}{$file_extension}";
           $folderPath = $row["filepath"];
           try {
             $resp = deleteFromStorageApi($filename, $folderPath);
@@ -44,6 +44,7 @@ if ($_SERVER['REQUEST_METHOD'] === "POST"): // POST METHOD
         }
         die("Deleted Successfully");
       }
+    }
     case "rename":
       if (!$model_name) {
         http_response_code(400);
