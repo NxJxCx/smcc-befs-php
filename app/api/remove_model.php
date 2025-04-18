@@ -15,6 +15,7 @@ if ($_SERVER['REQUEST_METHOD'] === "POST"):
     // $STATE_BASE_DIR = dirname(__DIR__);
     // $filepath = $STATE_BASE_DIR . DIRECTORY_SEPARATOR . $model_filepath;
     $filename = basename($model_filepath);
+    debug_out("Model filename for removal: {$filename}");
     $folderPath = rtrim($model_filepath, $filename);
 
     // if (!is_file($filepath)) {

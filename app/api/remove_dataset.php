@@ -19,7 +19,8 @@ if ($_SERVER['REQUEST_METHOD'] === "POST"):
     //     die(json_encode(["detail" => "Already deleted"]));
     // }
 
-    $filename = $dataset_filename;
+    $filename = basename($dataset_filename);
+    debug_out("Dataset filename for removal: {$filename}");
     $folderPath = "/training_datasets/";
     // unlink($filepath);
     try {
