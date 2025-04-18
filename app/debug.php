@@ -7,7 +7,7 @@ try {
 if ($log !== null) {
     $l = explode("\n", $log);
     $log = array_map(fn($line) => "<div style=\"padding-bottom: 4px;\">" . str_replace("\r", "", $line) . "</div>", $l);
-    $log = implode("<br>", $log);
+    $log = implode("", $log);
 } else {
     $log = "No log file found";
 }
