@@ -14,7 +14,7 @@ if ($_SERVER['REQUEST_METHOD'] === "POST"): // POST METHOD
   switch ($action) {
     case "delete": {
       {
-        $qs = "SELECT id FROM `inference_model` WHERE id = ?";
+        $qs = "SELECT id, filename, file_extension, filepath FROM `inference_model` WHERE id = ?";
         $stmt = conn()->prepare($qs);
         $stmt->bind_param("s", $model_id);
         $stmt->execute();
