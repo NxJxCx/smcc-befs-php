@@ -6,15 +6,17 @@ try {
 }
 if ($log !== null) {
     $l = explode("\n", $log);
-    $log = array_map(fn($line) => "<div>" . str_replace("\r", "", $line) . "</div>", $l);
+    $log = array_map(fn($line) => "<div style=\"padding-bottom: 4px;\">" . str_replace("\r", "", $line) . "</div>", $l);
     $log = implode("<br>", $log);
 } else {
     $log = "No log file found";
 }
 ?>
-<code style="white-space: pre-wrap; background-color: #f4f4f4; padding: 10px; border-radius: 5px; font-family: monospace; font-size: 14px;">
-    <?= $log ?>
-</code>
+<div style="border: 1px solid gray; border-radius: 5px; padding: 10px; white-space: normal; word-wrap: break-word; background-color: #eee;">
+    <code>
+        <?= $log ?>
+    </code>
+</div>
 <?php
 
 $folderPath = "/inference/";
