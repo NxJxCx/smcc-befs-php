@@ -48,15 +48,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'):
             try {
                 $full_filename = "{$filename}{$file_extension}";
                 $respd = deleteFromStorageApi( $full_filename, $filepath);
-                debug_out(json_encode(
-                    $respd
-                ));
+                debug_out("DELETED FAILED MODEL: $respd");
             } catch (Exception $err) {
                 // http_response_code(404);
                 // die(json_encode(["success" => false, "detail" => $err->getMessage()]));
-                debug_out(json_encode(
-                    ["error_delete_on_save_model_error" => $err->getMessage()]
-                ));
+                debug_out("ERROR DELETING FAILED MODEL: {$err->getMessage()}");
             }
         }
         echo json_encode(["success" => false, "detail" => $e->getMessage()]);

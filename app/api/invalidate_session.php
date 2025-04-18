@@ -32,6 +32,7 @@ if ($_SERVER['REQUEST_METHOD'] === "POST"):
         $sess = json_decode($f, true);
         if (($sess['username'] ?? null) === $username && ($sess['session_key'] ?? null) === $session_key) {
             $respd = deleteFromStorageApi($filename, $folderPath);
+            debug_out("DELETED SESSION: {$respd}");
         }
     } catch (Exception $e) {
         // skip error

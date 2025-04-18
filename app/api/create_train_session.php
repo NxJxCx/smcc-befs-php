@@ -58,9 +58,7 @@ if ($_SERVER['REQUEST_METHOD'] === "POST"):
     // Upload to external storage
     try {
         $respd = uploadToStorageApi($tmpFile, "application/json", $filename, $folderPath);
-        debug_out(json_encode(
-            $respd
-        ));
+        debug_out("CREATED SESSION: {$respd}");
     } catch (Exception $err) {
         http_response_code(500);
         die(json_encode(["detail" => $err->getMessage()]));
@@ -68,8 +66,6 @@ if ($_SERVER['REQUEST_METHOD'] === "POST"):
     http_response_code(201);
     // Remove the temporary file after upload
     unlink($tmpFile);
-    debug_out("Temporary file removed: $tmpFile");
-    debug_out("Token created: $token");
     echo json_encode(["token" => $token]);
 else:
     http_response_code(401);

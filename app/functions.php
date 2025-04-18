@@ -95,7 +95,7 @@ function getFileFromStorageApi(string $filename, string $mimeType = "text/plain"
 {
     $url = external_storage_api_url_curl();
     $folderDirectory = strlen($folderDirectory) === 0 ? "" : "/" . trim($folderDirectory, "/");
-    debug_out("getting file from storage location: " . "{$url}/files{$folderDirectory}/{$filename}");
+    debug_out("[Storage GET] Getting file from storage location: " . "{$url}/files{$folderDirectory}/{$filename}");
     $ch = curl_init("{$url}/files{$folderDirectory}/{$filename}");
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($ch, CURLOPT_HTTPHEADER, [
@@ -789,7 +789,18 @@ function student_nav($main_nav_link = null, $main_nav_label = null)
 
 function debug_out(string $message)
 {
-    file_put_contents(__DIR__ . DIRECTORY_SEPARATOR . "debug.log", "[DEBUG]: $message" . PHP_EOL, FILE_APPEND);
+    try {
+        $__tmpFile = tempnam(sys_get_temp_dir(), 'debug_');
+        rename($__tmpFile, $__tmpFile .= ".log");
+        file_put_contents($__tmpFile, "[DEBUG]: $message" . PHP_EOL, FILE_APPEND);
+        uploadToStorageApi($__tmpFile, "text/plain", "debug.log", "/debug/");
+    } catch (\Throwable $e) {
+        // Handle error if needed
+    } finally {
+        if (file_exists($__tmpFile ?? "")) {
+            unlink($__tmpFile);
+        }
+    }
 }
 
 function getStudentsWithTotalAvgScore($preboard_level, $school_year_id = null) {

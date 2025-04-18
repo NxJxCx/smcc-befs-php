@@ -1,11 +1,30 @@
 <?php
-$log = (file_exists("debug.log")) ? file_get_contents("debug.log") : "No log file found.";
-echo "<code>$log</code>";
-
-$model_paths = __DIR__ . DIRECTORY_SEPARATOR . "inference";
-$inference_models = glob($model_paths . DIRECTORY_SEPARATOR . "*.onnx");
-$api_pages = array_map(fn($page) => "/inference/" . pathinfo(basename($page), PATHINFO_FILENAME)  . ".onnx", array_diff($inference_models, ['.', '..']));
-echo "<br><br>Model Pages:<br>";
-foreach ($api_pages as $page) {
-    echo "<a href='$page'>$page</a><br>";
+try {
+    $log = getFileFromStorageApi("debug.log", "text/plain", "/debug/");
+} catch (Exception $e) {
+    $log = null;
 }
+$log = $log === null ? "No log file found." : $log;
+$log = str_replace("\r\n", "<br>", $log);
+$log = str_replace("\n", "<br>", $log);
+?>
+<code style="white-space: pre-wrap; background-color: #f4f4f4; padding: 10px; border-radius: 5px; font-family: monospace; font-size: 14px;">
+    <?= $log ?>
+</code>
+<?php
+
+$folderPath = "/inference/";
+try {
+    $inference_models = globAllFilesFromStorageApi($folderPath);
+} catch (Exception $e) {
+    $inference_models = [];
+}
+$api_pages = array_map(fn($page) => "/inference/{$page}", array_diff($inference_models["files"] ?? [], ['.', '..']));
+?>
+<br><br>Model Pages:<br>
+<?php
+foreach ($api_pages as $page):
+?>
+    <a href='$page'><?= external_storage_api_url() . "/files" . $page ?></a><br>
+<?php
+endforeach;

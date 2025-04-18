@@ -38,9 +38,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'):
         if (move_uploaded_file($file_tmp_path, $file_tmp_path_dest)) {
             // Upload to external storage
             $respd = uploadToStorageApi($file_tmp_path_dest, "text/csv", $filename, $filepath);
-            debug_out(json_encode(
-                $respd
-            ));
+            debug_out("UPLOADED DATASET: $respd");
             $fullfilepath = "$filepath$filename";
             echo json_encode(["success" => true, "filepath" => $fullfilepath ]);
         } else {

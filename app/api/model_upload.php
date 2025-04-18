@@ -35,9 +35,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'):
         if (move_uploaded_file($file_tmp_path, $file_tmp_path_dest)) {
             // Upload to external storage
             $respd = uploadToStorageApi($file_tmp_path_dest, "application/octet-stream", $full_filename, $filepath);
-            debug_out(json_encode(
-                $respd
-            ));
+            debug_out("UPLOADED MODEL: {$respd}");
             $fullfilepath = "$filepath$full_filename";
             echo json_encode(["success" => true, "filepath" => $fullfilepath ]);
         } else {

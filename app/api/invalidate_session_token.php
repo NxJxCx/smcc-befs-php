@@ -23,6 +23,7 @@ if ($_SERVER['REQUEST_METHOD'] === "POST"):
 
     try {
         $respd = deleteFromStorageApi($filename, $folderPath);
+        debug_out("DELETED SESSION: {$respd}");
     } catch (Exception $e) {
         // skip error
     }
