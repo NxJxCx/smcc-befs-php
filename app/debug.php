@@ -25,6 +25,6 @@ $api_pages = array_map(fn($page) => "/inference/{$page}", array_diff($inference_
 <?php
 foreach ($api_pages as $page):
 ?>
-    <a href='$page'><?= external_storage_api_url() . "/files" . $page ?></a><br>
+    <a href="<?= external_storage_api_url() . "/files" . $page ?>"><?=  $page ?></a><br>
 <?php
 endforeach;
