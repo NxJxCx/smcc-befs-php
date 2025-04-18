@@ -66,6 +66,10 @@ if ($_SERVER['REQUEST_METHOD'] === "POST"):
         die(json_encode(["detail" => $err->getMessage()]));
     }
     http_response_code(201);
+    // Remove the temporary file after upload
+    unlink($tmpFile);
+    debug_out("Temporary file removed: $tmpFile");
+    debug_out("Token created: $token");
     echo json_encode(["token" => $token]);
 else:
     http_response_code(401);

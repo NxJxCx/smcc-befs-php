@@ -94,8 +94,9 @@ function deleteFromStorageApi(string $filename, string $folderDirectory = ""): s
 function getFileFromStorageApi(string $filename, string $mimeType = "text/plain", string $folderDirectory = ""): string
 {
     $url = external_storage_api_url_curl();
-    $folderDirectory = strlen($folderDirectory) === 0 ? "" : "/to/" . trim($folderDirectory, "/");
-    $ch = curl_init("{$url}/files{$folderDirectory}");
+    $folderDirectory = strlen($folderDirectory) === 0 ? "" : "/" . trim($folderDirectory, "/");
+    debug_out("getting file from storage location: " . "{$url}/files{$folderDirectory}/{$filename}");
+    $ch = curl_init("{$url}/files{$folderDirectory}/{$filename}");
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($ch, CURLOPT_HTTPHEADER, [
        "Content-Type: {$mimeType}"
@@ -158,6 +159,8 @@ function http_request_get(string $url)
     ]);
 
     $response = curl_exec($ch);
+    $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    debug_out("[HTTP GET] URL: $url, Response Code: $http_code, Response: $response");
     curl_close($ch);
     try {
         $data = json_decode($response, true);

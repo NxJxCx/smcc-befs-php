@@ -250,9 +250,19 @@ admin_html_head("Forecast Training", [
                 exit;
             }
             // get initial states
-            $STATE_BASE_DIR = dirname(__DIR__) . DIRECTORY_SEPARATOR . "training_states";
-            $filepath = $STATE_BASE_DIR . DIRECTORY_SEPARATOR . $_GET['train_token'] . ".json";
-            if (!is_file($filepath)) {
+            // $STATE_BASE_DIR = dirname(__DIR__) . DIRECTORY_SEPARATOR . "training_states";
+            // $filepath = $STATE_BASE_DIR . DIRECTORY_SEPARATOR . $_GET['train_token'] . ".json";
+            $filepath = "/training_states/";
+            $filenamestate = $_GET['train_token'] . ".json";
+            try {
+                debug_out("start..");
+                $isfile = getFileFromStorageApi( $filenamestate, "application/json", "/training_states/");
+                debug_out("FILE CONTENT:\n". json_encode(json_decode($isfile, true)));
+                $INITIAL_STATES = json_decode($isfile, true);
+                $state = $INITIAL_STATES["state"];
+                debug_out("INITIAL STATES:\n". json_encode($state));
+            } catch (Exception $err) {
+                debug_out("ERROR getting file: " . $err->getMessage());
                 ?>
                 <script>
                     alert("No Session State Found.");
@@ -263,8 +273,6 @@ admin_html_head("Forecast Training", [
                 <?php
                 exit;
             }
-            $INITIAL_STATES = json_decode(file_get_contents($filepath), true);
-            $state = $INITIAL_STATES["state"];
         ?>
         <input type="hidden" name="username" id="trainingSessionUsername" value="<?= $_SESSION['train_username'] ?>" />
         <input type="hidden" name="session_key" id="trainingSessionId" value="<?= $_SESSION['train_session_key'] ?>" />
